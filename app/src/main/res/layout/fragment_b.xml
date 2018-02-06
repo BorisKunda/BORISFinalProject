@@ -7,13 +7,16 @@
     tools:context="com.happytrees.finalproject.fragments.FragmentB">
 
     <TextView
-        android:id="@+id/tvB"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:text="FRAGMENT B"
-        android:textSize="50dp" />
+        android:layout_marginLeft="96dp"
+        android:layout_marginStart="96dp"
+        android:text="Map"
+        android:textSize="80dp" />
 </RelativeLayout>
 
 
