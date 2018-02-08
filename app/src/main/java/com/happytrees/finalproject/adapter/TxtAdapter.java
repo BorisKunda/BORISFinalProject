@@ -66,11 +66,25 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
         public void bindDataFromArrayToView(final TxtResult txtResultCurrent) {
 
-            TextView resultName = (TextView) myView.findViewById(R.id.resultName);
+            TextView resultName = (TextView) myView.findViewById(R.id.resultName);//NAME
             resultName.setText(txtResultCurrent.name);
 
-            TextView resultAddress = (TextView) myView.findViewById(R.id.resultAddress);
+            TextView resultAddress = (TextView) myView.findViewById(R.id.resultAddress);//ADDRESS
             resultAddress.setText(txtResultCurrent.formatted_address);
+
+            //latitude comes before longitude
+
+            TextView resultLatitude = (TextView)myView.findViewById(R.id.txtLatitude);//LATITUDE
+            double temporaryLatitude  =txtResultCurrent.geometry.location.lat;
+            String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
+            resultLatitude.setText(convertedLatitude);
+
+            TextView resultLongitude = (TextView)myView.findViewById(R.id.txtLongitude);
+            double temporaryLongitude = txtResultCurrent.geometry.location.lng;
+            String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
+            resultLongitude.setText(convertedLongitude);
+
+
 
             ImageView resultImage = (ImageView) myView.findViewById(R.id.resultImage);
 
