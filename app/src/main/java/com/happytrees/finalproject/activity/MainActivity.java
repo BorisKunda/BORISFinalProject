@@ -12,7 +12,7 @@ import com.happytrees.finalproject.fragments.FragmentB;
 
 public class MainActivity extends AppCompatActivity {
 
-
+//SAVE INSTANCE ON ROTATION CHANGE --> YET TO COME
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

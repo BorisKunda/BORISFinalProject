@@ -14,8 +14,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.happytrees.finalproject.R;
+import com.happytrees.finalproject.adapter.NearbyAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
+import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
+import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
 import com.happytrees.finalproject.rest.APIClient;
@@ -29,17 +32,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+
+//NEARBY SEARCH -- NEEDS TO BE FIXED!!!!!!!!!!!!!
+
 //YOU DON'T HAVE SERIALIZE EVERYTHING ONLY THE OBJECTS YOU WANT TO FETCH IN PARSING.AND YOU DON'T HAVE TO WRITE @SerializedName annotation
-//LINK  -->  https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza%20in%20jerusaelm&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
+// TEXT LINK  -->  https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza%20in%20jerusaelm&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
+//NEARBY LINK --> https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=sushi&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
 //IF THERE IS PROBLEM USE "+" INSTEAD OF "%20" -> https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza+in+Jerusalem&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
 public class FragmentA extends Fragment {
 
 
-
-
-    String query = "pizza%20in%20jerusalem";
-    String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";
+    //FOR TEXT SEARCH
+    String query = "pizza%20in%20jerusalem";//needs decoding
     String decodedQuery;
+    //FOR NEARBY SEARCH
+    String nLocation = "-33.8670522,151.1957362";
+    String radius = "500";
+    String keyword = "sushi";
+
+    String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
+
+
+
 
     public FragmentA() {
         // Required empty public constructor
@@ -93,12 +108,12 @@ public class FragmentA extends Fragment {
                                 RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource,   getActivity());
                                 fragArecycler.setAdapter(myTxtAdapter);
                                 myTxtAdapter.notifyDataSetChanged();//refresh
-                                Log.e("Results", " very good: " + response.body());
+                                Log.e("TxtResults", " very good: " + response.body());
                             }
 
                             @Override
                             public void onFailure(Call<TxtResponse> call, Throwable t) {
-                                Log.e("Results", " bad: " + t);
+                                Log.e("TxtResults", " bad: " + t);
                             }
                         });
 
@@ -106,7 +121,33 @@ public class FragmentA extends Fragment {
 
                         break;
                     case R.id.radioButtonNearbySearch:
+                        //NEARBY SEARCH -- NEEDS TO BE FIXED
                         Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+                        //nearby search call
+                        Call<NearbyResponse>nCall = apiService.getNearbyResults(nLocation,radius,keyword,key);
+                        nCall.enqueue(new Callback<NearbyResponse>() {
+                            @Override
+                            public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
+                                ArrayList<NearbyResult> nDataSource = new ArrayList<>();
+                                nDataSource.clear();//clean old list if there was call from before
+                                NearbyResponse nRes =response.body() ;
+                                nDataSource.addAll(nRes.results);
+
+                                fragArecycler.setLayoutManager(new LinearLayoutManager( getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                //setting txt adapter
+                                RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource,   getActivity());
+                                fragArecycler.setAdapter(myNearAdapter);
+                                myNearAdapter.notifyDataSetChanged();//refresh
+
+                                Log.e("TxtResults", " very good: " + response.body());
+                            }
+
+                            @Override
+                            public void onFailure(Call<NearbyResponse> call, Throwable t) {
+                                Log.e("NearResults", " bad: " + t);
+                            }
+                        });
+
                         break;
                 }
             }

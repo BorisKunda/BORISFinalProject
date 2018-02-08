@@ -31,6 +31,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public ArrayList<TxtResult> txtResults;//list of places results
     public Context context;
 
+    //constructor
     public TxtAdapter(ArrayList<TxtResult> txtResults,  Context context) {
         this.txtResults = txtResults;
         this.context = context;
@@ -54,7 +55,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
         return txtResults.size();
     }
 
-    //INNER CLASS EXTENDS RecyclerView.ViewHolder
+    //create inner class  YourInnerClassViewHolder extends RecyclerView.ViewHolder => implement constructor
     class TxtHolder extends RecyclerView.ViewHolder {
         View myView;
 
@@ -79,14 +80,14 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
             resultLatitude.setText(convertedLatitude);
 
-            TextView resultLongitude = (TextView)myView.findViewById(R.id.txtLongitude);
+            TextView resultLongitude = (TextView)myView.findViewById(R.id.txtLongitude);//LONGITUDE
             double temporaryLongitude = txtResultCurrent.geometry.location.lng;
             String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
             resultLongitude.setText(convertedLongitude);
 
 
 
-            ImageView resultImage = (ImageView) myView.findViewById(R.id.resultImage);
+            ImageView resultImage = (ImageView) myView.findViewById(R.id.resultImage);//IMAGE
 
             final ProgressBar progressBar = (ProgressBar) myView.findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible

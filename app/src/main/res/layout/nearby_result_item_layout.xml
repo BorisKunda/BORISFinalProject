@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/result_item_layout"
+    android:id="@+id/nearby_item_layout"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="vertical"
@@ -13,70 +13,67 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/resultName"
+            android:id="@+id/nearbyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:text="Name"
             android:textColor="#0f65c1"
             android:textSize="10sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/resultAddress"
+            android:paddingTop="10dp"
+            android:id="@+id/nearbyAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/resultName"
-            android:layout_marginTop="18dp"
+            android:layout_below="@+id/nearbyName"
             android:text="Address"
             android:textColor="#1f932e"
             android:textSize="10sp" />
 
         <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/resultImage"
-            android:layout_alignLeft="@+id/resultImage"
-            android:layout_alignStart="@+id/resultImage"
-            android:visibility="visible" />
-        <!--progress bar makes loading circle -->
-        <ImageView
-            android:id="@+id/resultImage"
+            android:id="@+id/nearbyProgress"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/resultAddress"
+            android:layout_alignParentTop="true"
+            android:visibility="visible" />
+        <!--progress bar makes loading circle -->
+
+        <ImageView
+            android:id="@+id/nearbyImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <TextView
-            android:id="@+id/txtLatitude"
+            android:id="@+id/nearbyLatitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/txtLongitude"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="15dp"
+            android:layout_centerVertical="true"
             android:text="latitude"
             android:textColor="#c43a08"
             android:textSize="10dp" />
 
         <TextView
-            android:id="@+id/txtLongitude"
+            android:id="@+id/nearbyLongitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/progress"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/nearbyLatitude"
+            android:layout_marginTop="12dp"
             android:text="longitude"
             android:textColor="#c43a08"
             android:textSize="10dp" />
-
 
     </RelativeLayout>
 
