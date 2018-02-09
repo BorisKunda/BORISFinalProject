@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nearby_item_layout"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="vertical"
-    >
-
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="100dp">
 
         <TextView
+            android:padding="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:id="@+id/nearbyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,60 +18,63 @@
             android:textSize="10sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:paddingTop="10dp"
-            android:id="@+id/nearbyAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/nearbyName"
-            android:text="Address"
-            android:textColor="#1f932e"
-            android:textSize="10sp" />
+    <TextView
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/nearbyAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="Address"
+        android:textColor="#1f932e"
+        android:textSize="10sp" />
 
-        <ProgressBar
-            android:id="@+id/nearbyProgress"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:visibility="visible" />
-        <!--progress bar makes loading circle -->
 
-        <ImageView
-            android:id="@+id/nearbyImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/ic_launcher_background" />
+    <ProgressBar
 
-        <TextView
-            android:id="@+id/nearbyLatitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="latitude"
-            android:textColor="#c43a08"
-            android:textSize="10dp" />
+        android:id="@+id/nearbyProgress"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:visibility="visible" />
+    <!--progress bar makes loading circle -->
 
-        <TextView
-            android:id="@+id/nearbyLongitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/nearbyLatitude"
-            android:layout_marginTop="12dp"
-            android:text="longitude"
-            android:textColor="#c43a08"
-            android:textSize="10dp" />
+    <ImageView
+
+        android:id="@+id/nearbyImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:padding="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="35dp"
+        android:id="@+id/nearbyLatitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="latitude"
+        android:textColor="#c43a08"
+        android:textSize="10dp" />
+
+    <TextView
+        android:padding="5dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/nearbyLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="longitude"
+        android:textColor="#c43a08"
+        android:textSize="10dp" />
+
 
     </RelativeLayout>
 
-</LinearLayout>
+
+
+

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -33,27 +34,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
-
-
 //YOU DON'T HAVE SERIALIZE EVERYTHING ONLY THE OBJECTS YOU WANT TO FETCH IN PARSING.AND YOU DON'T HAVE TO WRITE @SerializedName annotation
 // TEXT LINK  -->  https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza%20in%20jerusaelm&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
 //NEARBY LINK --> https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=sushi&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
 //IF THERE IS PROBLEM USE "+" INSTEAD OF "%20" -> https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza+in+Jerusalem&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
+
+
 public class FragmentA extends Fragment {
 
 
-    //FOR TEXT SEARCH
-    String query = "pizza%20in%20jerusalem";//needs decoding
-    String decodedQuery;
     //FOR NEARBY SEARCH
     String nLocation = "-33.8670522,151.1957362";
     String radius = "500";
-    String keyword = "sushi";
-
+    //VARIABLES SHARED BOTH BY SEARCHERS
     String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
-
-
+    EditText edtSearch;
+    String fromEdtTxt;
 
 
     public FragmentA() {
@@ -65,47 +61,44 @@ public class FragmentA extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_a, container, false);
+        View v = inflater.inflate(R.layout.fragment_a, container, false);
 
-        //URL DECODING
-        try {
-            decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        //EditText
+        edtSearch = (EditText) v.findViewById(R.id.editTextSearch);
 
         //setting RecyclerView
-        final RecyclerView fragArecycler= (RecyclerView) v.findViewById(R.id.recyclerSearch);
+        final RecyclerView fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
         //connect the retrofit class with the interface class
         //generate new instance of the interface and call it service
         final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
         //setting radio group
-        RadioGroup radioGroup = (RadioGroup) v .findViewById(R.id.radioGroup);//RadioGroup ensures that only one radio button can be selected at a time.
+        RadioGroup radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);//RadioGroup ensures that only one radio button can be selected at a time.
         //make radio group "listen" to changes in clicked radio buttons
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // checkedId is the RadioButton selected
+            public void onCheckedChanged(RadioGroup group, int checkedId) {   // checkedId is the RadioButton selected
+                //GET STRING VALUE FROM EDIT TEXT --> CHECK IF EMPTY
+                fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
 
-                switch(checkedId) {
+                switch (checkedId) {
                     case R.id.radioButtonTxtSearch:
                         //TXT SEARCH
-                        Toast.makeText(getContext()," text search selected",Toast.LENGTH_SHORT).show();
+
 
                         //text search call
-                        Call<TxtResponse> call = apiService.getMyResults(decodedQuery,key);
+                        Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
                         call.enqueue(new Callback<TxtResponse>() {
                             @Override
                             public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
                                 ArrayList<TxtResult> myDataSource = new ArrayList<>();
                                 myDataSource.clear();//clean old list if there was call from before
-                                TxtResponse res =response.body() ;
+                                TxtResponse res = response.body();
                                 myDataSource.addAll(res.results);
 
-                                fragArecycler.setLayoutManager(new LinearLayoutManager( getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                 //setting txt adapter
-                                RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource,   getActivity());
+                                RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                                 fragArecycler.setAdapter(myTxtAdapter);
                                 myTxtAdapter.notifyDataSetChanged();//refresh
                                 Log.e("TxtResults", " very good: " + response.body());
@@ -122,21 +115,21 @@ public class FragmentA extends Fragment {
 
                     case R.id.radioButtonNearbySearch:
                         //NEARBY SEARCH -- NEEDS TO BE FIXED
-                       Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+
                         //nearby search call
-                        Call<NearbyResponse>nCall = apiService.getNearbyResults(nLocation,radius,keyword,key);
+                        Call<NearbyResponse> nCall = apiService.getNearbyResults(nLocation, radius, fromEdtTxt, key);
                         nCall.enqueue(new Callback<NearbyResponse>() {
                             @Override
                             public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
-                              //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
                                 ArrayList<NearbyResult> nDataSource = new ArrayList<>();
                                 nDataSource.clear();//clean old list if there was call from before
-                                NearbyResponse nRes =response.body() ;
+                                NearbyResponse nRes = response.body();
                                 nDataSource.addAll(nRes.results);
 
-                                fragArecycler.setLayoutManager(new LinearLayoutManager( getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                 //setting txt adapter
-                                RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource,   getActivity());
+                                RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource, getActivity());
                                 fragArecycler.setAdapter(myNearAdapter);
                                 myNearAdapter.notifyDataSetChanged();//refresh
 
@@ -147,7 +140,7 @@ public class FragmentA extends Fragment {
                             @Override
                             public void onFailure(Call<NearbyResponse> call, Throwable t) {
                                 Log.e("NearResults", " bad: " + t);
-                                Toast.makeText(getContext(),"failure",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -159,3 +152,20 @@ public class FragmentA extends Fragment {
     }
 
 }
+/*
+    //CLEAN BUTTON --> Clean Edit Text field button
+        cleanBtn = (Button) findViewById(R.id.CleanBtn);
+        cleanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edtSearch.setText(" ");
+            }
+        });
+ */
+
+/*
+if (edtSearch.length() != 0) {
+//code
+   } else {
+   //you forgot to write you dumb fuck
+ */
