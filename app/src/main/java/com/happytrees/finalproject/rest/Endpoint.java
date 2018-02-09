@@ -18,7 +18,7 @@ public interface Endpoint {
     Call<TxtResponse> getMyResults(@Query("query") String query, @Query("key") String key);
 
     //NEARBYSEARCH
-    @GET("/maps/api/place/textsearch/json")
+    @GET("/maps/api/place/nearbysearch/json")
     Call<NearbyResponse>getNearbyResults(@Query("location") String location, @Query("radius") String radius,@Query("keyword") String keyword,@Query("key") String key);
 }
 

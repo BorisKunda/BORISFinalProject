@@ -92,7 +92,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             final ProgressBar progressBar = (ProgressBar) myView.findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-            String photo_reference = txtResultCurrent.photos.get(0).photo_reference;//keeping photo_reference under  String  photo_reference variable
+            String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
             String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
 

@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 
 
-//NEARBY SEARCH -- NEEDS TO BE FIXED!!!!!!!!!!!!!
+
 
 //YOU DON'T HAVE SERIALIZE EVERYTHING ONLY THE OBJECTS YOU WANT TO FETCH IN PARSING.AND YOU DON'T HAVE TO WRITE @SerializedName annotation
 // TEXT LINK  -->  https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza%20in%20jerusaelm&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
@@ -117,17 +117,18 @@ public class FragmentA extends Fragment {
                             }
                         });
 
-
-
                         break;
+
+
                     case R.id.radioButtonNearbySearch:
                         //NEARBY SEARCH -- NEEDS TO BE FIXED
-                        Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
                         //nearby search call
                         Call<NearbyResponse>nCall = apiService.getNearbyResults(nLocation,radius,keyword,key);
                         nCall.enqueue(new Callback<NearbyResponse>() {
                             @Override
                             public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
+                              //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
                                 ArrayList<NearbyResult> nDataSource = new ArrayList<>();
                                 nDataSource.clear();//clean old list if there was call from before
                                 NearbyResponse nRes =response.body() ;
@@ -140,11 +141,13 @@ public class FragmentA extends Fragment {
                                 myNearAdapter.notifyDataSetChanged();//refresh
 
                                 Log.e("TxtResults", " very good: " + response.body());
+
                             }
 
                             @Override
                             public void onFailure(Call<NearbyResponse> call, Throwable t) {
                                 Log.e("NearResults", " bad: " + t);
+                                Toast.makeText(getContext(),"failure",Toast.LENGTH_SHORT).show();
                             }
                         });
 
