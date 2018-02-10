@@ -78,14 +78,15 @@ public class FragmentA extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {   // checkedId is the RadioButton selected
-                //GET STRING VALUE FROM EDIT TEXT --> CHECK IF EMPTY
+                //GET STRING VALUE FROM EDIT TEXT AND CHECK IF EMPTY
+
+                if(edtSearch.length()!=0 ) {//if EditText is not empty
                 fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
 
                 switch (checkedId) {
+
                     case R.id.radioButtonTxtSearch:
                         //TXT SEARCH
-
-
                         //text search call
                         Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
                         call.enqueue(new Callback<TxtResponse>() {
@@ -109,13 +110,11 @@ public class FragmentA extends Fragment {
                                 Log.e("TxtResults", " bad: " + t);
                             }
                         });
-
                         break;
 
 
                     case R.id.radioButtonNearbySearch:
                         //NEARBY SEARCH -- NEEDS TO BE FIXED
-
                         //nearby search call
                         Call<NearbyResponse> nCall = apiService.getNearbyResults(nLocation, radius, fromEdtTxt, key);
                         nCall.enqueue(new Callback<NearbyResponse>() {
@@ -140,13 +139,20 @@ public class FragmentA extends Fragment {
                             @Override
                             public void onFailure(Call<NearbyResponse> call, Throwable t) {
                                 Log.e("NearResults", " bad: " + t);
-                                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+
                             }
                         });
 
                         break;
+
+
+                }
+
+                } else {
+                    Toast.makeText(getContext(),"please write something",Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
         return v;
     }
@@ -163,9 +169,3 @@ public class FragmentA extends Fragment {
         });
  */
 
-/*
-if (edtSearch.length() != 0) {
-//code
-   } else {
-   //you forgot to write you dumb fuck
- */
