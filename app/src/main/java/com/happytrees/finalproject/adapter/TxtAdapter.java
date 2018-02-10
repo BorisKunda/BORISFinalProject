@@ -2,6 +2,7 @@ package com.happytrees.finalproject.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
 
 import java.util.ArrayList;
-import java.util.List;
 
 //create a class that extends RecyclerView.Adapter .put inside the < >  ==> Yourclass.YourInnerClassViewHolder
 
@@ -67,6 +67,8 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
         public void bindDataFromArrayToView(final TxtResult txtResultCurrent) {
 
+
+
             TextView resultName = (TextView) myView.findViewById(R.id.resultName);//NAME
             resultName.setText(txtResultCurrent.name);
 
@@ -92,24 +94,29 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             final ProgressBar progressBar = (ProgressBar) myView.findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-            String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
-            String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
+            if (txtResultCurrent.photos == null)
+                Log.e("TxtAdapter", "Photos list of search results is null");
+            else if (txtResultCurrent.photos.isEmpty())
+                Log.e("TxtAdapter", "Photos list of search results is empty");
+            else {
+                String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
+                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
 
+                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);//removes progress bar if there was exception
+                        return false;
+                    }
 
-            Glide.with(context).load( urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
-                @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                   progressBar .setVisibility(View.GONE);//removes progress bar if there was exception
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                    progressBar .setVisibility(View.GONE);////removes progress bar if picture finished loading
-                    return false;
-                }
-            }).into(resultImage);//SET IMAGE THROUGH GLIDE
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);////removes progress bar if picture finished loading
+                        return false;
+                    }
+                }).into(resultImage);//SET IMAGE THROUGH GLIDE
+            }
         }
     }
 }
