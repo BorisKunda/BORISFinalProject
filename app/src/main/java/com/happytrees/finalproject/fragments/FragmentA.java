@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,6 +35,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+//TASKS:
+//edit text listener
+//fish in moscow error
 
 
 //YOU DON'T HAVE SERIALIZE EVERYTHING ONLY THE OBJECTS YOU WANT TO FETCH IN PARSING.AND YOU DON'T HAVE TO WRITE @SerializedName annotation
@@ -63,8 +70,19 @@ public class FragmentA extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_a, container, false);
 
+
         //EditText
         edtSearch = (EditText) v.findViewById(R.id.editTextSearch);
+
+        //CLEAN BUTTON
+        Button cleanBtn = (Button)v.findViewById(R.id.cleanBtn);
+        cleanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edtSearch.setText(" ");
+            }
+        });
+
 
         //setting RecyclerView
         final RecyclerView fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
@@ -78,9 +96,7 @@ public class FragmentA extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {   // checkedId is the RadioButton selected
-                //GET STRING VALUE FROM EDIT TEXT AND CHECK IF EMPTY
-
-                if(edtSearch.length()!=0 ) {//if EditText is not empty
+                //GET STRING VALUE FROM EDIT TEXT
                 fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
 
                 switch (checkedId) {
@@ -148,9 +164,7 @@ public class FragmentA extends Fragment {
 
                 }
 
-                } else {
-                    Toast.makeText(getContext(),"please write something",Toast.LENGTH_SHORT).show();
-                }
+
             }
 
         });
@@ -158,14 +172,26 @@ public class FragmentA extends Fragment {
     }
 
 }
+
 /*
-    //CLEAN BUTTON --> Clean Edit Text field button
-        cleanBtn = (Button) findViewById(R.id.CleanBtn);
-        cleanBtn.setOnClickListener(new View.OnClickListener() {
+
+        EditText editText = (EditText)findViewById(R.id.ET);
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                edtSearch.setText(" ");
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.e("INPUT","1");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("INPUT","2");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e("INPUT","3");
             }
         });
+    }
  */
 

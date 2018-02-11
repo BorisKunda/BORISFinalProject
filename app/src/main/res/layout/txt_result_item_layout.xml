@@ -38,13 +38,13 @@
             android:layout_alignParentTop="true"
             android:visibility="visible" />
         <!--progress bar makes loading circle -->
-        <ImageView
-            android:id="@+id/resultImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/ic_launcher_background" />
+    <ImageView
+        android:id="@+id/resultImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/noimage" />
 
         <TextView
             android:padding="5dp"

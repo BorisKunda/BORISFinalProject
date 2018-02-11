@@ -48,7 +48,7 @@
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/noimage" />
 
     <TextView
         android:padding="5dp"

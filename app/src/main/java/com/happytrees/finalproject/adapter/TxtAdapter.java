@@ -2,6 +2,7 @@ package com.happytrees.finalproject.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,16 +33,16 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public Context context;
 
     //constructor
-    public TxtAdapter(ArrayList<TxtResult> txtResults,  Context context) {
+    public TxtAdapter(ArrayList<TxtResult> txtResults, Context context) {
         this.txtResults = txtResults;
         this.context = context;
     }
 
     @Override
     public TxtHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.txt_result_item_layout,null);//getContext refers to get value of context variable
+        View view = LayoutInflater.from(context).inflate(R.layout.txt_result_item_layout, null);//getContext refers to get value of context variable
         TxtHolder txtHolder = new TxtHolder(view);
-        return  txtHolder;//In the onCreateViewHolder() method we inflate the row layout as a View and return as ViewHolder object.
+        return txtHolder;//In the onCreateViewHolder() method we inflate the row layout as a View and return as ViewHolder object.
     }
 
     @Override
@@ -53,6 +54,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     @Override
     public int getItemCount() {
         return txtResults.size();
+
     }
 
     //create inner class  YourInnerClassViewHolder extends RecyclerView.ViewHolder => implement constructor
@@ -67,6 +69,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
         public void bindDataFromArrayToView(final TxtResult txtResultCurrent) {
 
+
             TextView resultName = (TextView) myView.findViewById(R.id.resultName);//NAME
             resultName.setText(txtResultCurrent.name);
 
@@ -74,44 +77,55 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             resultAddress.setText(txtResultCurrent.formatted_address);
 
             //latitude comes before longitude
-
-            TextView resultLatitude = (TextView)myView.findViewById(R.id.txtLatitude);//LATITUDE
-            double temporaryLatitude  =txtResultCurrent.geometry.location.lat;
+            TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
+            double temporaryLatitude = txtResultCurrent.geometry.location.lat;
             String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
             resultLatitude.setText(convertedLatitude);
 
-            TextView resultLongitude = (TextView)myView.findViewById(R.id.txtLongitude);//LONGITUDE
+
+            TextView resultLongitude = (TextView) myView.findViewById(R.id.txtLongitude);//LONGITUDE
             double temporaryLongitude = txtResultCurrent.geometry.location.lng;
             String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
             resultLongitude.setText(convertedLongitude);
 
 
-
             ImageView resultImage = (ImageView) myView.findViewById(R.id.resultImage);//IMAGE
+
 
             final ProgressBar progressBar = (ProgressBar) myView.findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-            String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
-            String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
+           //we check photos in case some of json objects have no photo_reference
+            if (txtResultCurrent.photos == null)
+                Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
+            else if (txtResultCurrent.photos.isEmpty())
+                Log.e("TxtAdapter", "Photos list of search results is empty");//there is string but its empty " "
+            else {
+                String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
+                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
 
+                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);//removes progress bar if there was exception
+                        return false;
+                    }
 
-            Glide.with(context).load( urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
-                @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                   progressBar .setVisibility(View.GONE);//removes progress bar if there was exception
-                    return false;
-                }
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);////removes progress bar if picture finished loading
+                        return false;
 
-                @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                    progressBar .setVisibility(View.GONE);////removes progress bar if picture finished loading
-                    return false;
-                }
-            }).into(resultImage);//SET IMAGE THROUGH GLIDE
+                    }
+
+                }).into(resultImage);//SET IMAGE THROUGH GLIDE
+            }
         }
     }
 }
 
 
+/*
+
+ */

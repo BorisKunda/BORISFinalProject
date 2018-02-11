@@ -2,6 +2,7 @@ package com.happytrees.finalproject.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,25 +95,31 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
             final ProgressBar nProgressBar = (ProgressBar) nearView.findViewById(R.id.nearbyProgress);//PROGRESS BAR
             nProgressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-            String photo_reference = nResult.photos.get(0).photo_reference;//we fetch first image (i = 0) from array of photos
-            String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
+            if (nResult.photos == null)
+                Log.e("NearbyAdapter", "Photos list of search results is null");//means there no String photo_reference
+            else if (nResult.photos.isEmpty())
+                Log.e("NearbyAdapter", "Photos list of search results is empty");//there is string but its empty " "
+            else {
+                String photo_reference = nResult.photos.get(0).photo_reference;//we fetch first image (i = 0) from array of photos
+                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
-            Glide.with(context).load( urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
-                @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                   nProgressBar.setVisibility(View.GONE);//removes progress bar if there was exception
-                    return false;
-                }
+                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        nProgressBar.setVisibility(View.GONE);//removes progress bar if there was exception
+                        return false;
+                    }
 
-                @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                     nProgressBar.setVisibility(View.GONE);////removes progress bar if picture finished loading
-                    return false;
-                }
-            }).into(nImage);//SET IMAGE THROUGH GLIDE
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        nProgressBar.setVisibility(View.GONE);////removes progress bar if picture finished loading
+                        return false;
+                    }
+                }).into(nImage);//SET IMAGE THROUGH GLIDE
 
 
+            }
         }
-    }
 
+    }
 }
