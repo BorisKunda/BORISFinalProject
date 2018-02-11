@@ -109,9 +109,13 @@ public class FragmentA extends Fragment {
                             @Override
                             public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
                                 ArrayList<TxtResult> myDataSource = new ArrayList<>();
+
                                 myDataSource.clear();//clean old list if there was call from before
                                 TxtResponse res = response.body();
                                 myDataSource.addAll(res.results);
+                                if (myDataSource.isEmpty()) {
+                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                 //setting txt adapter
@@ -141,6 +145,9 @@ public class FragmentA extends Fragment {
                                 nDataSource.clear();//clean old list if there was call from before
                                 NearbyResponse nRes = response.body();
                                 nDataSource.addAll(nRes.results);
+                                if (nDataSource.isEmpty()) {
+                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                 //setting txt adapter
