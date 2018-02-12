@@ -141,6 +141,31 @@ public class FragmentA extends Fragment {
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
                              String modifiedString = String.valueOf(s);//convert CharSequence to String
+                                call = apiService.getMyResults(modifiedString, key);
+                                call.enqueue(new Callback<TxtResponse>() {
+                                    @Override
+                                    public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
+                                        ArrayList<TxtResult>modDataSource = new ArrayList<>();
+
+                                        modDataSource.clear();//clean old list if there was call from before
+                                        TxtResponse res = response.body();
+                                        modDataSource.addAll(res.results);
+                                        if (modDataSource.isEmpty()) {
+                                            // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                        }
+
+                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                        //setting txt adapter
+                                        RecyclerView.Adapter myTxtAdapter = new TxtAdapter(modDataSource, getActivity());
+                                        fragArecycler.setAdapter(myTxtAdapter);
+                                        myTxtAdapter.notifyDataSetChanged();//refresh
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<TxtResponse> call, Throwable t) {
+
+                                    }
+                                });
                             }
 
                             @Override
