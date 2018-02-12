@@ -114,7 +114,7 @@ public class FragmentA extends Fragment {
                                 TxtResponse res = response.body();
                                 myDataSource.addAll(res.results);
                                 if (myDataSource.isEmpty()) {
-                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                   // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                 }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
@@ -122,12 +122,29 @@ public class FragmentA extends Fragment {
                                 RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                                 fragArecycler.setAdapter(myTxtAdapter);
                                 myTxtAdapter.notifyDataSetChanged();//refresh
-                                Log.e("TxtResults", " very good: " + response.body());
+                             //   Log.e("TxtResults", " very good: " + response.body());
                             }
 
                             @Override
                             public void onFailure(Call<TxtResponse> call, Throwable t) {
-                                Log.e("TxtResults", " bad: " + t);
+                            //    Log.e("TxtResults", " bad: " + t);
+                            }
+                        });
+                        //TXT SEARCH -> LISTEN TO CHANGES IN EDIT TEXT
+                        edtSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            //do nothing
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                            //do nothing
                             }
                         });
                         break;
@@ -146,7 +163,7 @@ public class FragmentA extends Fragment {
                                 NearbyResponse nRes = response.body();
                                 nDataSource.addAll(nRes.results);
                                 if (nDataSource.isEmpty()) {
-                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                   // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                 }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
@@ -155,17 +172,33 @@ public class FragmentA extends Fragment {
                                 fragArecycler.setAdapter(myNearAdapter);
                                 myNearAdapter.notifyDataSetChanged();//refresh
 
-                                Log.e("TxtResults", " very good: " + response.body());
+                             //   Log.e("TxtResults", " very good: " + response.body());
 
                             }
 
                             @Override
                             public void onFailure(Call<NearbyResponse> call, Throwable t) {
-                                Log.e("NearResults", " bad: " + t);
+                           //     Log.e("NearResults", " bad: " + t);
 
                             }
                         });
+                        //TXT SEARCH -> LISTEN TO CHANGES IN EDIT TEXT
+                        edtSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
                         break;
 
 
