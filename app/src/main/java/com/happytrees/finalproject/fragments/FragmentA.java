@@ -57,6 +57,7 @@ public class FragmentA extends Fragment {
     String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
     EditText edtSearch;
     String fromEdtTxt;
+    Call<TxtResponse> call;
 
 
     public FragmentA() {
@@ -104,7 +105,7 @@ public class FragmentA extends Fragment {
                     case R.id.radioButtonTxtSearch:
                         //TXT SEARCH
                         //text search call
-                        Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
+                        call = apiService.getMyResults(fromEdtTxt, key);
                         call.enqueue(new Callback<TxtResponse>() {
                             @Override
                             public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
@@ -139,7 +140,7 @@ public class FragmentA extends Fragment {
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                             String modifiedString = String.valueOf(s);//convert CharSequence to String
                             }
 
                             @Override
@@ -191,7 +192,7 @@ public class FragmentA extends Fragment {
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                                String modifiedString2  =  String.valueOf(s);//convert CharSequence to String
                             }
 
                             @Override
