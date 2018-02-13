@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     FusedLocationProviderClient mFusedLocationClient;
     public static final int REQUEST_LOCATION_CODE = 99;
+    GoogleApiClient client;
 
 
     @Override
@@ -47,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
 
-
+        //get last location
         mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 // Got last known location. In some rare situations this can be null.
                 if (location != null) {
-                    Log.i("MAPS", "Location: " + location.getLatitude() + " " + location.getLongitude());
+                    Log.i("MAPS", "Latitude " + location.getLatitude() + " Longitude " + location.getLongitude());
                 }
             }
         });
@@ -81,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public boolean isTablet() {//METHOD CHECKS IF DEVICE HAS XLARGE SCREEN.IF IT DOES IT PUTS BOTH FRAGMENT A AND B INSIDE SCREEN
+    //METHOD CHECKS IF DEVICE HAS XLARGE SCREEN.IF IT DOES IT PUTS BOTH FRAGMENT A AND B INSIDE SCREEN
+    public boolean isTablet() {
         {
             boolean isTab = false;
            LinearLayout ExtraContainer = findViewById(R.id.ExtraContainer);
@@ -93,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
             return isTab;
         }
     }
-    public boolean checkLocationPermission() {//CHECKS IF THERE IS NEED ON REQUESTING LOCATION PERMISSION FROM USER IN THE RUNTIME
+    //CHECKS IF THERE ARE GRANTED PERMISSIONS ALREADY ,IF NOT ASKS RUNTIME PERMISSION
+    public boolean checkLocationPermission() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)  != PackageManager.PERMISSION_GRANTED)//check if there already was granted permission
         {
 
@@ -112,8 +116,26 @@ public class MainActivity extends AppCompatActivity {
             return true;
     }
 
+    //CHECKS RESULT OF RUNTIME PERMISSION REQUEST
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode) {
+                case REQUEST_LOCATION_CODE:
+                    if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    {
+                        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(this,"Permission Denied" , Toast.LENGTH_LONG).show();
+                    }
+            }
+
+
+        }
     }
-}
+
+//CHECK IF GPS ENABLED
