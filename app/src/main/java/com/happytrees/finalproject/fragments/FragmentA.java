@@ -57,7 +57,6 @@ public class FragmentA extends Fragment {
     String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
     EditText edtSearch;
     String fromEdtTxt;
-    Call<TxtResponse> call;
 
 
     public FragmentA() {
@@ -105,72 +104,30 @@ public class FragmentA extends Fragment {
                     case R.id.radioButtonTxtSearch:
                         //TXT SEARCH
                         //text search call
-                        call = apiService.getMyResults(fromEdtTxt, key);
+                        Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
                         call.enqueue(new Callback<TxtResponse>() {
                             @Override
                             public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
                                 ArrayList<TxtResult> myDataSource = new ArrayList<>();
-
                                 myDataSource.clear();//clean old list if there was call from before
                                 TxtResponse res = response.body();
                                 myDataSource.addAll(res.results);
+
                                 if (myDataSource.isEmpty()) {
-                                   // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
-                                }
+                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                                                  }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                 //setting txt adapter
                                 RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                                 fragArecycler.setAdapter(myTxtAdapter);
                                 myTxtAdapter.notifyDataSetChanged();//refresh
-                             //   Log.e("TxtResults", " very good: " + response.body());
+                                Log.e("TxtResults", " very good: " + response.body());
                             }
 
                             @Override
                             public void onFailure(Call<TxtResponse> call, Throwable t) {
-                            //    Log.e("TxtResults", " bad: " + t);
-                            }
-                        });
-                        //TXT SEARCH -> LISTEN TO CHANGES IN EDIT TEXT
-                        edtSearch.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            //do nothing
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                             String modifiedString = String.valueOf(s);//convert CharSequence to String
-                                call = apiService.getMyResults(modifiedString, key);
-                                call.enqueue(new Callback<TxtResponse>() {
-                                    @Override
-                                    public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
-                                        ArrayList<TxtResult>modDataSource = new ArrayList<>();
-
-                                        modDataSource.clear();//clean old list if there was call from before
-                                        TxtResponse res = response.body();
-                                        modDataSource.addAll(res.results);
-                                        if (modDataSource.isEmpty()) {
-                                            // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
-                                        }
-
-                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
-                                        //setting txt adapter
-                                        RecyclerView.Adapter myTxtAdapter = new TxtAdapter(modDataSource, getActivity());
-                                        fragArecycler.setAdapter(myTxtAdapter);
-                                        myTxtAdapter.notifyDataSetChanged();//refresh
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<TxtResponse> call, Throwable t) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                            //do nothing
+                                Log.e("TxtResults", " bad: " + t);
                             }
                         });
                         break;
@@ -188,8 +145,9 @@ public class FragmentA extends Fragment {
                                 nDataSource.clear();//clean old list if there was call from before
                                 NearbyResponse nRes = response.body();
                                 nDataSource.addAll(nRes.results);
+
                                 if (nDataSource.isEmpty()) {
-                                   // Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                    Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                 }
 
                                 fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
@@ -198,33 +156,17 @@ public class FragmentA extends Fragment {
                                 fragArecycler.setAdapter(myNearAdapter);
                                 myNearAdapter.notifyDataSetChanged();//refresh
 
-                             //   Log.e("TxtResults", " very good: " + response.body());
+                                Log.e("TxtResults", " very good: " + response.body());
 
                             }
 
                             @Override
                             public void onFailure(Call<NearbyResponse> call, Throwable t) {
-                           //     Log.e("NearResults", " bad: " + t);
+                                Log.e("NearResults", " bad: " + t);
 
                             }
                         });
-                        //TXT SEARCH -> LISTEN TO CHANGES IN EDIT TEXT
-                        edtSearch.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                String modifiedString2  =  String.valueOf(s);//convert CharSequence to String
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-
-                            }
-                        });
                         break;
 
 
