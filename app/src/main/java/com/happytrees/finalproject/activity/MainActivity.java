@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)//dialog cant be cancelable with back key
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));//result
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -127,43 +127,14 @@ public class MainActivity extends AppCompatActivity {
     }
     //CHECKS IF THERE ARE GRANTED PERMISSIONS ALREADY ,IF NOT ASKS RUNTIME PERMISSION
     public boolean checkLocationPermission() {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)  != PackageManager.PERMISSION_GRANTED)//check if there already was granted permission
-        {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION))//display dialog with explanation(PermissionRationale) why user should grant permission
-            {
-                ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION },REQUEST_LOCATION_CODE);
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION },REQUEST_LOCATION_CODE);
-            }
-            return false;
-
-        }
-        else
+        //code
             return true;
     }
 
     //CHECKS RESULT OF RUNTIME PERMISSION REQUEST
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode) {
-                case REQUEST_LOCATION_CODE:
-                    if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    {
-                        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED)
-                        {
-
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(this,"Permission Denied" , Toast.LENGTH_LONG).show();
-                    }
-            }
-
-
+        //code
         }
     }
 
