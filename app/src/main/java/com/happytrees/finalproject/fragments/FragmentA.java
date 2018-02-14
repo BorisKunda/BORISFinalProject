@@ -58,6 +58,7 @@ public class FragmentA extends Fragment {
     EditText edtSearch;
     String fromEdtTxt;
     boolean txtChecked,nearChecked =false;//both false by default
+    RecyclerView fragArecycler;
 
 
     public FragmentA() {
@@ -73,6 +74,13 @@ public class FragmentA extends Fragment {
 
 
 
+
+        //setting RecyclerView
+       fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
+
+        //connect the retrofit class with the interface class
+        //generate new instance of the interface and call it service
+        final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
 
         //GO BUTTON
         Button goBtn = (Button)v.findViewById(R.id.goBtn);
@@ -92,10 +100,68 @@ public class FragmentA extends Fragment {
                     //TXT SELECTED
                 }else if (txtChecked&&!nearChecked) {
                     Log.e("TAG", fromEdtTxt+"A");
+                    //text search call
+                    Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
+                    call.enqueue(new Callback<TxtResponse>() {
+                        @Override
+                        public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
+                            ArrayList<TxtResult> myDataSource = new ArrayList<>();
+                            myDataSource.clear();//clean old list if there was call from before
+                            TxtResponse res = response.body();
+                            myDataSource.addAll(res.results);
+
+                            if (myDataSource.isEmpty()) {
+                                Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                            }
+
+                            fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                            //setting txt adapter
+                            RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
+                            fragArecycler.setAdapter(myTxtAdapter);
+                            myTxtAdapter.notifyDataSetChanged();//refresh
+                            Log.e("TxtResults", " very good: " + response.body());
+                        }
+
+                        @Override
+                        public void onFailure(Call<TxtResponse> call, Throwable t) {
+                            Log.e("TxtResults", " bad: " + t);
+                        }
+                    });
 
                     //NEARBY SELECTED
                 }else if (!txtChecked&&nearChecked){
                     Log.e("TAG",fromEdtTxt+"B");
+                    //nearby search call
+                    Call<NearbyResponse> nCall = apiService.getNearbyResults(nLocation, radius, fromEdtTxt, key);
+                    nCall.enqueue(new Callback<NearbyResponse>() {
+                        @Override
+                        public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
+                            //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+                            ArrayList<NearbyResult> nDataSource = new ArrayList<>();
+                            nDataSource.clear();//clean old list if there was call from before
+                            NearbyResponse nRes = response.body();
+                            nDataSource.addAll(nRes.results);
+
+                            if (nDataSource.isEmpty()) {
+                                Toast.makeText(getActivity(),"No Results",Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                            }
+
+                            fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                            //setting txt adapter
+                            RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource, getActivity());
+                            fragArecycler.setAdapter(myNearAdapter);
+                            myNearAdapter.notifyDataSetChanged();//refresh
+
+                            Log.e("TxtResults", " very good: " + response.body());
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<NearbyResponse> call, Throwable t) {
+                            Log.e("NearResults", " bad: " + t);
+
+                        }
+                    });
                 }
             }
         });
@@ -110,12 +176,6 @@ public class FragmentA extends Fragment {
         });
 
 
-        //setting RecyclerView
-        final RecyclerView fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
-
-        //connect the retrofit class with the interface class
-        //generate new instance of the interface and call it service
-        final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
         //setting radio group
         RadioGroup radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);//RadioGroup ensures that only one radio button can be selected at a time.
         //make radio group "listen" to changes in clicked radio buttons
