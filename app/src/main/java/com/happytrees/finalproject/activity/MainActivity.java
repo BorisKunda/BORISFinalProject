@@ -28,11 +28,13 @@ import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.fragments.FragmentB;
 
-//https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
+//SAVE INSTANCE ON ROTATION CHANGE --> YET TO COME
+//USE ANOTHER DATABASE THAN SUGAR ORM FOR INSTANCE RXJAVA
+
 
 public class MainActivity extends AppCompatActivity {
+//https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
 
-//SAVE INSTANCE ON ROTATION CHANGE --> YET TO COME
 
     FusedLocationProviderClient mFusedLocationClient;
     public static final int REQUEST_LOCATION_CODE = 99;
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)//dialog cant be cancelable with back key
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));//result
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));//result //onProviderChange
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
