@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.happytrees.finalproject.R;
@@ -32,51 +33,14 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //USE ANOTHER DATABASE THAN SUGAR ORM FOR INSTANCE RXJAVA
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
-
-
-    FusedLocationProviderClient mFusedLocationClient;
-    public static final int REQUEST_LOCATION_CODE = 99;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ////CHECK IF GPS ENABLED
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {//if gps not enabled display dialog warning message
-            buildAlertMessageNoGps();
-        }
-
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)//VERSION_CODES.M = Android 6.0    we check if our minimum sdk greater or equal to 6.0 (this when runtime permissions first took place)
-        {
-            checkLocationPermission();
-
-        }
-
-        //set location provider
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-
-        //get last location
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    Log.i("MAPS", "Latitude " + location.getLatitude() + " Longitude " + location.getLongitude());
-                }
-            }
-        });
-
-
-
 
 
         //INIT FRAGMENT A
@@ -110,33 +74,5 @@ public class MainActivity extends AppCompatActivity {
             return isTab;
         }
     }
-    public void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-                .setCancelable(false)//dialog cant be cancelable with back key
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));//result //onProviderChange
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-    //CHECKS IF THERE ARE GRANTED PERMISSIONS ALREADY ,IF NOT ASKS RUNTIME PERMISSION
-    public boolean checkLocationPermission() {
-        //code
-            return true;
-    }
-
-    //CHECKS RESULT OF RUNTIME PERMISSION REQUEST
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //code
-        }
-    }
+}
 
