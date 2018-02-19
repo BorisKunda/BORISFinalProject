@@ -49,7 +49,6 @@ public class FragmentA extends Fragment {
 
 
     //FOR NEARBY SEARCH
-    String nLocation = "-33.8670522,151.1957362";
     String newNLocation;
     String radius = "2500";//I set 2500 meters temporary cause there no food around GANEY AVIV in nearby search radius 500m.
     //VARIABLES SHARED BOTH BY SEARCHERS
