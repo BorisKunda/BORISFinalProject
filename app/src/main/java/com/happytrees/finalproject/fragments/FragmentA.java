@@ -15,9 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.happytrees.finalproject.R;
+import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.adapter.NearbyAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
@@ -48,7 +50,8 @@ public class FragmentA extends Fragment {
 
     //FOR NEARBY SEARCH
     String nLocation = "-33.8670522,151.1957362";
-    String radius = "500";
+    String newNLocation;
+    String radius = "2500";//I set 2500 meters temporary cause there no food around GANEY AVIV in nearby search radius 500m.
     //VARIABLES SHARED BOTH BY SEARCHERS
     String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
     EditText edtSearch;
@@ -67,8 +70,6 @@ public class FragmentA extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_a, container, false);
-
-
 
 
         //setting RecyclerView
@@ -126,9 +127,16 @@ public class FragmentA extends Fragment {
 
                     //NEARBY SELECTED
                 }else if (!txtChecked&&nearChecked){
-                    Log.e("TAG",fromEdtTxt+"B");
+
+                    //FETCHED LATITUDE AND LONGITUDE FROM MAIN ACTIVITY
+                    double fUpLatitude = MainActivity.upLatitude;//fetch current position's latitude from Main Activity
+                    double fUpLongitude = MainActivity.upLongitude; //fetch current position's Longitude from Main Activity
+                    String convertedFUpLatitude = String.valueOf(fUpLatitude);//convert double to String
+                    String convertedFUpLongitude = String.valueOf(fUpLongitude);//convert double to String
+                    String comma = ",";
+                    newNLocation = convertedFUpLatitude + comma + convertedFUpLongitude;
                     //nearby search call
-                    Call<NearbyResponse> nCall = apiService.getNearbyResults(nLocation, radius, fromEdtTxt, key);
+                    Call<NearbyResponse> nCall = apiService.getNearbyResults(newNLocation, radius, fromEdtTxt, key);
                     nCall.enqueue(new Callback<NearbyResponse>() {
                         @Override
                         public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {

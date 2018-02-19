@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public LocationCallback mLocationCallback;
     LocationRequest mLocationRequest;
     public static final int REQUEST_CODE_LOCATION = 4;
+    public static double upLatitude,upLongitude;//updated current position's latitude and longitude made as static in order to be accessible in both  Adapter java classes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationResult(LocationResult locationResult) {//callback on request of location updates made by method : requestLocationUpdates()
                 for (Location location : locationResult.getLocations()) {
                     Log.e("CURRENT LOCATION", " Latitude " + location.getLatitude() + " Longitude " + location.getLongitude());
+                    upLatitude = location.getLatitude();//KEEP CURRENT LOCATION
+                    upLongitude = location.getLongitude();//KEEP CURRENT LOCATION
+
                 }
             }
         };

@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
+import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 
 import java.util.ArrayList;
