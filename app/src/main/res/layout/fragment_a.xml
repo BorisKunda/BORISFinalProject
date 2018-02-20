@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/foodi"
+    android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
     tools:context="com.happytrees.finalproject.fragments.FragmentA">
 
     <!-- TODO: Update blank fragment layout -->

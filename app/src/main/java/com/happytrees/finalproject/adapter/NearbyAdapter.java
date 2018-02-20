@@ -1,6 +1,7 @@
 package com.happytrees.finalproject.adapter;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,9 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
     //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
     public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
-
     public ArrayList<NearbyResult> nearResults;//list of places results
     public Context context;
+    public float [] nearDistanceResults = new float[10];//10 random number.you need any number higher than 3
 
     //constructor
     public NearbyAdapter(ArrayList<NearbyResult> nearResults, Context context) {
@@ -90,6 +91,12 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
             String convertedNLongitude = String.valueOf(temporaryNLongitude);//you cant setText on double so you need convert it first to String
             nearLongitude.setText(convertedNLongitude);
 
+            TextView resultNearDistance = (TextView)nearView.findViewById(R.id.nearDistance);//DISTANCE
+            //method calculates distances between two points according to their latitude and longitude
+            Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryNLatitude,temporaryNLongitude,nearDistanceResults);// IN METERS
+            resultNearDistance.setText(nearDistanceResults[0]/1000 + "km");
+
+
             ImageView nImage = (ImageView) nearView.findViewById(R.id.nearbyImage);//IMAGE
 
 
@@ -124,3 +131,9 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     }
 }
+/*
+TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
+            //method calculates distances between two points according to their latitude and longitude
+            Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);// IN METERS
+            resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");
+ */

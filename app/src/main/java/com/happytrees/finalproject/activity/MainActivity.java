@@ -41,6 +41,9 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //USE ANOTHER DATABASE THAN SUGAR ORM FOR INSTANCE RXJAVA
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 //ADD BROADCAST RECEIVER FOR GPS AND BATTERY
+//pizza+tel-aviv has long txt results good for checking design
+//Services?MyLooperLooper
+//EXPENDABLE LAYOUT
 
 
 public class MainActivity extends AppCompatActivity {

@@ -3,8 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:background="@android:color/holo_blue_bright">
+    android:layout_height="400dp"
+    android:background="@android:color/background_light">
 
     <TextView
         android:id="@+id/nearbyName"
@@ -15,20 +15,20 @@
         android:padding="5dp"
         android:text="Name"
         android:textColor="#0f65c1"
-        android:textSize="10sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/nearbyAddress"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="60dp"
         android:padding="5dp"
         android:paddingTop="10dp"
         android:text="Address"
         android:textColor="#1f932e"
-        android:textSize="10sp" />
+        android:textSize="20sp" />
 
 
     <ProgressBar
@@ -55,22 +55,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="260dp"
         android:padding="5dp"
         android:text="latitude"
         android:textColor="#c43a08"
-        android:textSize="10dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/nearbyLongitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="290dp"
         android:padding="5dp"
         android:text="longitude"
         android:textColor="#c43a08"
-        android:textSize="10dp" />
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/nearDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="320dp"
+        android:padding="5dp"
+        android:text="distance"
+        android:textColor="#c40834"
+        android:textSize="20dp" />
 
 
 </RelativeLayout>
