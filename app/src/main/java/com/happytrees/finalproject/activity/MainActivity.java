@@ -46,7 +46,7 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //MAP WITH MARKER
 //FAVOURITES
 //DATABASE
-//EXPENDABLE LAYOUT
+///EXPENDABLE LAYOUT
 
 
 public class MainActivity extends AppCompatActivity {
