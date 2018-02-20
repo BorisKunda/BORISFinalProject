@@ -43,6 +43,9 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //ADD BROADCAST RECEIVER FOR GPS AND BATTERY
 //pizza+tel-aviv has long txt results good for checking design
 //Services?MyLooperLooper
+//MAP WITH MARKER
+//FAVOURITES
+//DATABASE
 //EXPENDABLE LAYOUT
 
 
