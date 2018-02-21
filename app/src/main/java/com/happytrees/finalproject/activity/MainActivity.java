@@ -46,7 +46,8 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //MAP WITH MARKER
 //FAVOURITES
 //DATABASE
-///EXPENDABLE LAYOUT
+//CHECK IF GPS ENABLED BEFORE CONDUCTING NEARBY SEARCH
+//EXPENDABLE LAYOUT
 
 
 public class MainActivity extends AppCompatActivity {

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"
+    android:background="@android:color/holo_orange_light"
     tools:context="com.happytrees.finalproject.fragments.FragmentA">
 
     <!-- TODO: Update blank fragment layout -->
@@ -52,9 +52,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerSearch"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="700dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
     <Button
         android:id="@+id/cleanBtn"
