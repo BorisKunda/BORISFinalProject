@@ -48,6 +48,7 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //DATABASE
 //CHECK IF GPS ENABLED BEFORE CONDUCTING NEARBY SEARCH
 //EXPENDABLE LAYOUT
+//SETTINGS -> MILES/KM , DIFFERENT RADIUS
 
 
 public class MainActivity extends AppCompatActivity {

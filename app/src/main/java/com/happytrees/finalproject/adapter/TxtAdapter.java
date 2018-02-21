@@ -103,7 +103,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             final ProgressBar progressBar = (ProgressBar) myView.findViewById(R.id.progress);
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-           //we check photos in case some of json objects have no photo_reference
+           //we check photos in case some of json objects have no photo_reference       //PHOTOS
             if (txtResultCurrent.photos == null)
                 Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
             else if (txtResultCurrent.photos.isEmpty())
