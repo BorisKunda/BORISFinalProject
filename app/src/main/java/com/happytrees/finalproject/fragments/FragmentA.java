@@ -5,17 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.happytrees.finalproject.R;
@@ -23,7 +19,6 @@ import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.adapter.NearbyAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
-import com.happytrees.finalproject.handling_click_events.RecyclerTouchListener;
 import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
@@ -31,9 +26,7 @@ import com.happytrees.finalproject.model_txt_search.TxtResult;
 import com.happytrees.finalproject.rest.APIClient;
 import com.happytrees.finalproject.rest.Endpoint;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,20 +111,7 @@ public class FragmentA extends Fragment {
                             fragArecycler.setAdapter(myTxtAdapter);
                             myTxtAdapter.notifyDataSetChanged();//refresh
                             Log.e("TxtResults", " very good: " + response.body());
-                            //MAKE TEXT RESULTS CLICKABLE
-                            fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {//RecyclerTouchListener is java class which handles click events .Inside it set ClickListener interface where we defined both onClick and OnLongClick methods
-                                @Override
-                                public void onClick(View view, int position) {
-                                    TxtResult txtResult = myDataSource.get(position);//create temporary object of "TxtResult" type in order to fetch item object based on position from myDataSource array
-                                    Toast.makeText(getActivity(),txtResult.name,Toast.LENGTH_SHORT).show();
-                                }
 
-                                @Override
-                                public void onLongClick(View view, int position) {
-                                    TxtResult txtResult = myDataSource.get(position);//create temporary object of "TxtResult" type in order to fetch item object based on position from myDataSource array
-                                    Toast.makeText(getActivity(),txtResult.formatted_address,Toast.LENGTH_SHORT).show();
-                                }
-                            }));
                         }
 
                         @Override
@@ -173,21 +153,6 @@ public class FragmentA extends Fragment {
 
                             Log.e("TxtResults", " very good: " + response.body());
 
-
-                            //MAKE NEARBY RESULTS CLICKABLE
-                            fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {//RecyclerTouchListener is java class which handles click events .Inside it set ClickListener interface where we defined both onClick and OnLongClick methods
-                                @Override
-                                public void onClick(View view, int position) {
-                                    NearbyResult nearbyResult = nDataSource.get(position);//create temporary object of "NearbyResult" type in order to fetch item object based on position from nDataSource array
-                                    Toast.makeText(getActivity(),nearbyResult.name,Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onLongClick(View view, int position) {
-                                    NearbyResult nearbyResult = nDataSource.get(position);//create temporary object of "NearbyResult" type in order to fetch item object based on position from nDataSource array
-                                    Toast.makeText(getActivity(),nearbyResult.vicinity,Toast.LENGTH_SHORT).show();
-                                }
-                            }));
                         }
 
                         @Override
@@ -229,7 +194,6 @@ public class FragmentA extends Fragment {
 
 
                     case R.id.radioButtonNearbySearch:
-                        //NEARBY SEARCH -- NEEDS TO BE FIXED
 
                         txtChecked = false;
                         nearChecked = true;
@@ -246,17 +210,3 @@ public class FragmentA extends Fragment {
     }
 
 }
-/*
-
-       fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {
-           @Override
-           public void onClick(View view, int position) {
-               Toast.makeText(getActivity(),"df",Toast.LENGTH_SHORT).show();
-           }
-
-           @Override
-           public void onLongClick(View view, int position) {
-               Toast.makeText(getActivity(),"long df",Toast.LENGTH_SHORT).show();
-           }
-       }));
- */

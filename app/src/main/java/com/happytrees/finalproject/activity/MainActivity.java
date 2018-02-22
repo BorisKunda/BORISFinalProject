@@ -37,11 +37,11 @@ import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.fragments.FragmentB;
 
-//SAVE INSTANCE ON ROTATION CHANGE --> YET TO COME
-//USE ANOTHER DATABASE THAN SUGAR ORM FOR INSTANCE RXJAVA
-//DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
+
+
+//YET TO COME:
+//SAVE INSTANCE ON ROTATION CHANGE
 //ADD BROADCAST RECEIVER FOR GPS AND BATTERY
-//pizza+tel-aviv has long txt results good for checking design
 //Services?MyLooperLooper
 //MAP WITH MARKER
 //FAVOURITES
@@ -50,6 +50,10 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //EXPENDABLE LAYOUT
 //SETTINGS -> MILES/KM , DIFFERENT RADIUS
 
+
+//NOTES:
+// ANOTHER WAY TO MAKE RECYCLER VIEW CLICKABLE IS TO CREATE JAVA CLASS WHICH IMPLEMENTS RecyclerView.OnItemTouchListener  AND WILL HAVE INNER INTERFACE WITH BOTH (CLICK ,LONG CLICK METHODS)
+//DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 
 public class MainActivity extends AppCompatActivity {
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude

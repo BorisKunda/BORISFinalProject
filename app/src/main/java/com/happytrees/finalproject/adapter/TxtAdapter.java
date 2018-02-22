@@ -132,6 +132,13 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
                 }).into(resultImage);//SET IMAGE THROUGH GLIDE
             }
+            //MAKE RECYCLER TEXT CLICKABLE
+            myView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,txtResultCurrent.name,Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }
