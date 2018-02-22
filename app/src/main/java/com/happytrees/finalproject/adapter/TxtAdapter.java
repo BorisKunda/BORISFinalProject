@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
+import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public ArrayList<TxtResult> txtResults;//list of places results
     public Context context;
     public float [] txtDistanceResults = new float[10];//10 random number.you need any number higher than 3
+
 
     //constructor
     public TxtAdapter(ArrayList<TxtResult> txtResults, Context context) {
@@ -134,24 +137,3 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 }
 
 
-/*
-float [] results = new float[5];//reminder : new float [5] means results array has five members.meaning last member will be results[4] cause first member in array is zero
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        double latitude1 =31.9614843;
-       double latitude2 =  31.9563457;
-        double longitude1 = 34.8815636;
-       double longitude2 = 34.8981207;
-
-
-
-        //method calculates distances between two points according to their latitude and longitude
-       Location.distanceBetween(latitude1,longitude1,latitude2,longitude2,results);// IN METERS
-
-
-            Log.e("distance",results[0] + " meters ");//you always need first one ([0]) the rest([1],[2].[3]..)  is irrelevant.make your array any number bigger than 10
- */

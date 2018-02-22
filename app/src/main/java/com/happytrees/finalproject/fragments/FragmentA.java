@@ -23,6 +23,7 @@ import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.adapter.NearbyAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
+import com.happytrees.finalproject.handling_click_events.RecyclerTouchListener;
 import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
@@ -74,6 +75,7 @@ public class FragmentA extends Fragment {
         //setting RecyclerView
        fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
+
         //connect the retrofit class with the interface class
         //generate new instance of the interface and call it service
         final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
@@ -101,7 +103,7 @@ public class FragmentA extends Fragment {
                     call.enqueue(new Callback<TxtResponse>() {
                         @Override
                         public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
-                            ArrayList<TxtResult> myDataSource = new ArrayList<>();
+                            final ArrayList<TxtResult> myDataSource = new ArrayList<>();
                             myDataSource.clear();//clean old list if there was call from before
                             TxtResponse res = response.body();
                             myDataSource.addAll(res.results);
@@ -116,6 +118,20 @@ public class FragmentA extends Fragment {
                             fragArecycler.setAdapter(myTxtAdapter);
                             myTxtAdapter.notifyDataSetChanged();//refresh
                             Log.e("TxtResults", " very good: " + response.body());
+                            //MAKE TEXT RESULTS CLICKABLE
+                            fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {//RecyclerTouchListener is java class which handles click events .Inside it set ClickListener interface where we defined both onClick and OnLongClick methods
+                                @Override
+                                public void onClick(View view, int position) {
+                                    TxtResult txtResult = myDataSource.get(position);//create temporary object of "TxtResult" type in order to fetch item object based on position from myDataSource array
+                                    Toast.makeText(getActivity(),txtResult.name,Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+                                    TxtResult txtResult = myDataSource.get(position);//create temporary object of "TxtResult" type in order to fetch item object based on position from myDataSource array
+                                    Toast.makeText(getActivity(),txtResult.formatted_address,Toast.LENGTH_SHORT).show();
+                                }
+                            }));
                         }
 
                         @Override
@@ -140,7 +156,7 @@ public class FragmentA extends Fragment {
                         @Override
                         public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
                             //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
-                            ArrayList<NearbyResult> nDataSource = new ArrayList<>();
+                            final ArrayList<NearbyResult> nDataSource = new ArrayList<>();
                             nDataSource.clear();//clean old list if there was call from before
                             NearbyResponse nRes = response.body();
                             nDataSource.addAll(nRes.results);
@@ -157,6 +173,21 @@ public class FragmentA extends Fragment {
 
                             Log.e("TxtResults", " very good: " + response.body());
 
+
+                            //MAKE NEARBY RESULTS CLICKABLE
+                            fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {//RecyclerTouchListener is java class which handles click events .Inside it set ClickListener interface where we defined both onClick and OnLongClick methods
+                                @Override
+                                public void onClick(View view, int position) {
+                                    NearbyResult nearbyResult = nDataSource.get(position);//create temporary object of "NearbyResult" type in order to fetch item object based on position from nDataSource array
+                                    Toast.makeText(getActivity(),nearbyResult.name,Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onLongClick(View view, int position) {
+                                    NearbyResult nearbyResult = nDataSource.get(position);//create temporary object of "NearbyResult" type in order to fetch item object based on position from nDataSource array
+                                    Toast.makeText(getActivity(),nearbyResult.vicinity,Toast.LENGTH_SHORT).show();
+                                }
+                            }));
                         }
 
                         @Override
@@ -215,3 +246,17 @@ public class FragmentA extends Fragment {
     }
 
 }
+/*
+
+       fragArecycler.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), fragArecycler, new RecyclerTouchListener.ClickListener() {
+           @Override
+           public void onClick(View view, int position) {
+               Toast.makeText(getActivity(),"df",Toast.LENGTH_SHORT).show();
+           }
+
+           @Override
+           public void onLongClick(View view, int position) {
+               Toast.makeText(getActivity(),"long df",Toast.LENGTH_SHORT).show();
+           }
+       }));
+ */
