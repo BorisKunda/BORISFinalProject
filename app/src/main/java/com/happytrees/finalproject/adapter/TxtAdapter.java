@@ -1,6 +1,9 @@
 package com.happytrees.finalproject.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -133,14 +136,49 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                 }).into(resultImage);//SET IMAGE THROUGH GLIDE
             }
             //MAKE RECYCLER TEXT CLICKABLE
+            //CLICK
             myView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context,txtResultCurrent.name,Toast.LENGTH_SHORT).show();
                 }
             });
+            //LONG CLICK
+            myView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    //alert dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("which one suits you best?");//dialog message
+                    builder.setPositiveButton("Save to Favourites", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context,"Save to Favourites",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+
+                    builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context,"Share",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.show();
+                    return true;
+                }
+            });
         }
     }
 }
 
+/*
+  //ALERT DIALOG
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Adding Options");//dialog title
+                builder.setMessage("which one suits you best?");//dialog message
 
+
+                builder.show();//don't forget otherwise dialog wont show
+ */
