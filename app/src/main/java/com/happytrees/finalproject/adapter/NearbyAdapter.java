@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
+import com.happytrees.finalproject.database.ResultDB;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
     public ArrayList<NearbyResult> nearResults;//list of places results
     public Context context;
     public float [] nearDistanceResults = new float[10];//10 random number.you need any number higher than 3
+    public  String  formatted_address;
 
     //constructor
     public NearbyAdapter(ArrayList<NearbyResult> nearResults, Context context) {
@@ -146,7 +148,16 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
                     builder.setPositiveButton("Save to Favourites", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(context,"Save to Favourites",Toast.LENGTH_SHORT).show();
+                          formatted_address = nResult.vicinity;//convert vicinity into formatted_address
+                            if (nResult.photos == null ||nResult.photos.isEmpty()) {//there no photo reference
+                                ResultDB nAltResultDB = new ResultDB(nResult.name,formatted_address,nResult.geometry.location.lat,nResult.geometry.location.lng,"no photo");
+                                nAltResultDB.save();
+                            }else {//there is photo reference
+                                ResultDB nResultDB = new ResultDB(nResult.name,formatted_address,nResult.geometry.location.lat,nResult.geometry.location.lng,nResult.photos.get(0).photo_reference);
+                                nResultDB.save();
+                            }
+
+                            Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
                         }
                     });
 
