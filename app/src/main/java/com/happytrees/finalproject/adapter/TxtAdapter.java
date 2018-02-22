@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
+import com.happytrees.finalproject.database.ResultDB;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
 
@@ -153,7 +154,9 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                     builder.setPositiveButton("Save to Favourites", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(context,"Save to Favourites",Toast.LENGTH_SHORT).show();
+                            ResultDB resultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,txtResultCurrent.photos.get(0).photo_reference);
+                            resultDB.save();
+                            Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
                         }
                     });
 
