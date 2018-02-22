@@ -151,18 +151,24 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                     //alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("which one suits you best?");//dialog message
-                    builder.setPositiveButton("Save to Favourites", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton("Save to Favourites", new DialogInterface.OnClickListener() {//SAVE OPTION
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ResultDB resultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,txtResultCurrent.photos.get(0).photo_reference);
-                            resultDB.save();
+                            if (txtResultCurrent.photos == null || txtResultCurrent.photos.isEmpty()) {//there no photo reference
+                                ResultDB altResultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,"no photo");
+                                altResultDB.save();
+                            }else {//there is photo reference
+                                ResultDB resultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,txtResultCurrent.photos.get(0).photo_reference);
+                                resultDB.save();
+                            }
+
                             Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
                         }
                     });
 
 
 
-                    builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {//SHARE OPTION
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(context,"Share",Toast.LENGTH_SHORT).show();
@@ -177,11 +183,15 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 }
 
 /*
-  //ALERT DIALOG
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Adding Options");//dialog title
-                builder.setMessage("which one suits you best?");//dialog message
-
-
-                builder.show();//don't forget otherwise dialog wont show
+    if (txtResultCurrent.photos == null)
+                Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
+            else if (txtResultCurrent.photos.isEmpty())
+                Log.e("TxtAdapter", "Photos list of search results is empty");//there is string but its empty " "
+            else {
+                String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
+                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
+ */
+/*
+    ResultDB resultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,txtResultCurrent.photos.get(0).photo_reference);
+                            resultDB.save();
  */
