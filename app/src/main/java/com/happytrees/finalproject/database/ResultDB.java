@@ -17,7 +17,7 @@ This way we will store objects made by TxtResult class through ResultDB class in
 public class ResultDB extends SugarRecord {
 
     public String name;
-    public String formatted_address;//VICINITY ???
+    public String formatted_address;//I converted vicinity into formatted_address later
     public double lat;
     public double lng;
     public String photo_reference;

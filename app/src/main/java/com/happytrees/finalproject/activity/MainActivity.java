@@ -19,10 +19,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,7 +37,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.fragments.FragmentB;
-
+import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //YET TO COME:
@@ -45,15 +46,17 @@ import com.happytrees.finalproject.fragments.FragmentB;
 //Services?MyLooperLooper
 //MAP WITH MARKER
 //FAVOURITES
-//DATABASE
 //CHECK IF GPS ENABLED BEFORE CONDUCTING NEARBY SEARCH
 //EXPENDABLE LAYOUT
 //SETTINGS -> MILES/KM , DIFFERENT RADIUS
+//RecyclerView Animators
+//DARK DIALOG
 
 
 //NOTES:
 // ANOTHER WAY TO MAKE RECYCLER VIEW CLICKABLE IS TO CREATE JAVA CLASS WHICH IMPLEMENTS RecyclerView.OnItemTouchListener  AND WILL HAVE INNER INTERFACE WITH BOTH (CLICK ,LONG CLICK METHODS)
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
+//WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DONT NEED USE INTERFACE
 
 public class MainActivity extends AppCompatActivity {
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
@@ -247,5 +250,29 @@ public class MainActivity extends AppCompatActivity {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());//update only if there is permission
         }
     }
+    //MENU
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_template, menu);//inflate menu via xml template
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.FavouritesMenuBtn:
+                //call favourites fragment
+                FragmentFavourites fragmentFavourites = new FragmentFavourites();
+                getSupportFragmentManager().beginTransaction().replace(R.id.MainContainer,fragmentFavourites).commit();
+                break;
+        }
+        return  true;
+    }
 }
 
+/*
+     //CREATE AND DISPLAY myListFragment in containerLayout in MainActivity
+        MyListFragment myListFragment = new MyListFragment();
+        myListFragment.setRetainInstance(true);//KEEPS FRAGMENT SAME AFTER ROTATION CHANGE (portrait <-> landscape) --> FIND MORE ELEGANT WAY
+        getFragmentManager().beginTransaction().replace(R.id.MainActLayout,myListFragment).commit();
+ */

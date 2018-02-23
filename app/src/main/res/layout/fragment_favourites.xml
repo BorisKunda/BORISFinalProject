@@ -16,6 +16,12 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerFavourites"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true" />
+
 
 
 </RelativeLayout>

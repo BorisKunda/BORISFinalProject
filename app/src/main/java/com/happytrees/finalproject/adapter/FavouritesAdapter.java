@@ -1,36 +1,104 @@
 package com.happytrees.finalproject.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
-import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.database.ResultDB;
-import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Boris on 2/8/2018.
+ * Created by Boris on 2/22/2018.
  */
-//Main class -> create a class that extends RecyclerView.Adapter .put inside the < >  ==> Yourclass.YourInnerClassViewHolder => implement methods
-//Inner class ->  YourInnerClassViewHolder extends RecyclerView.ViewHolder => implement methods
 
+
+//Main class -> create a class that extends RecyclerView.Adapter .put inside the < >  ==> Yourclass.YourInnerClassViewHolder => implement methods
+//Inner class -> create inner class  YourInnerClassViewHolder extends RecyclerView.ViewHolder => implement constructor
+
+
+    //MAIN CLASS
+public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder>{
+
+    //VARIABLES
+    public List<ResultDB> favouritesList;
+    public Context context;
+    //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
+    public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
+    public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
+
+//constructor
+    public FavouritesAdapter(List<ResultDB> favouritesList, Context context) {
+        this.favouritesList = favouritesList;
+        this.context = context;
+    }
+
+    //create ViewHolder
+    @Override
+    public FavouritesAdapter.FavouritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View fView = LayoutInflater.from(context).inflate(R.layout.favourites_item,null);
+        FavouritesViewHolder favouritesViewHolder = new FavouritesViewHolder(fView);
+        return favouritesViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(FavouritesAdapter.FavouritesViewHolder holder, int position) {
+        ResultDB dbResult = favouritesList.get(position);
+        holder.bindDataFromArrayToView(dbResult);
+    }
+
+    @Override
+    public int getItemCount() {
+        return favouritesList.size();//size of favouritesList array
+    }
+    //INNER CLASS
+    public class FavouritesViewHolder extends RecyclerView.ViewHolder {
+        View favouriteView;//define view variable
+
+        //override default constructor
+        public FavouritesViewHolder(View itemView) {
+            super(itemView);
+            favouriteView = itemView;
+        }
+        //custom method we need to define
+        public void bindDataFromArrayToView(final ResultDB fResultDB) {
+            TextView favouriteName = (TextView)favouriteView.findViewById(R.id.favouriteName);
+            favouriteName.setText(fResultDB.name);
+
+         //   TextView favouriteAddress = (TextView)favouriteView.findViewById(R.id.favouriteAddress);
+            //favouriteAddress.setText(fResultDB.formatted_address);
+
+            //latitude comes before longitude
+            //THE REST LATTER
+
+        }
+        /*
+         TextView nearbyName = (TextView) nearView.findViewById(R.id.nearbyName);//NAME
+            nearbyName.setText(nResult.name);
+
+            TextView nearbyAddress = (TextView) nearView.findViewById(R.id.nearbyAddress);//ADDRESS
+            nearbyAddress.setText(nResult.vicinity);
+
+            //latitude comes before longitude
+            TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
+            double temporaryNLatitude = nResult.geometry.location.lat;
+            String convertedNLatitude = String.valueOf(temporaryNLatitude);//you cant setText on double so you need convert it first to String
+            nearLatitude.setText(convertedNLatitude);
+
+            TextView nearLongitude = (TextView) nearView.findViewById(R.id.nearbyLongitude);//LONGITUDE
+            double temporaryNLongitude = nResult.geometry.location.lng;
+            String convertedNLongitude = String.valueOf(temporaryNLongitude);//you cant setText on double so you need convert it first to String
+            nearLongitude.setText(convertedNLongitude);
+         */
+    }
+}
+/*
+//create a class that extends RecyclerView.Adapter .put inside the < >  ==> Yourclass.YourInnerClassViewHolder => implement methods
 //MAIN CLASS
 public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyViewHolder> {
 
@@ -47,14 +115,14 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
         this.nearResults = nearResults;
         this.context = context;
     }
-
-    //create ViewHolder
+  //create ViewHolder
     @Override
     public NearbyAdapter.NearbyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View nView = LayoutInflater.from(context).inflate(R.layout.nearby_result_item_layout, null);//getContext refers to get value of context variable
         NearbyViewHolder nearbyViewHolder = new NearbyViewHolder(nView);
         return nearbyViewHolder;//In the onCreateViewHolder() method we inflate the row layout as a View and return as ViewHolder object.
     }
+
 
     @Override
     public void onBindViewHolder(NearbyAdapter.NearbyViewHolder holder, int position) {
