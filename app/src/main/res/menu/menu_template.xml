@@ -5,8 +5,6 @@
     <item android:title="Favourites"
         android:id="@+id/FavouritesMenuBtn"/>
 
-    <item android:title="Delete All"
-        android:id="@+id/deleteAllMenuBtn"/>
     <item android:title="Exit"
         android:id="@+id/ExitMenuBtn"/>
 

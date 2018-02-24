@@ -54,6 +54,8 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 //SETTINGS -> MILES/KM , DIFFERENT RADIUS
 //RecyclerView Animators
 //DARK DIALOG
+//addToBackStack TO ALL FRAGMENTS
+//SHARE
 
 
 //NOTES:
@@ -61,6 +63,12 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 //WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DONT NEED USE INTERFACE
 //WITH FRAGMENTS ALWAYS USE .replace()
+
+
+// DELETE ALL DB
+     /*  List<Location> allContacts = Location.listAll(Location.class);
+        Location.deleteAll(Location.class); */
+
 
 public class MainActivity extends AppCompatActivity {
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
@@ -273,6 +281,9 @@ public class MainActivity extends AppCompatActivity {
                 //call favourites fragment
                 FragmentFavourites fragmentFavourites = new FragmentFavourites();
                 getSupportFragmentManager().beginTransaction().addToBackStack("favourites").replace(R.id.MainContainer,fragmentFavourites).commit(); //addingToBackStack in this example undoes fragment replacing.Otherwise pushing back button would exist from application(cause it would close activity and there no another activities)
+                break;
+            case R.id.ExitMenuBtn:
+                finish();//closes current activity and its associated fragments
                 break;
 
         }
