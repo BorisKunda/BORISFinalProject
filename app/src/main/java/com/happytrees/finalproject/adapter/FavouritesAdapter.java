@@ -67,34 +67,26 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         }
         //custom method we need to define
         public void bindDataFromArrayToView(final ResultDB fResultDB) {
-            TextView favouriteName = (TextView)favouriteView.findViewById(R.id.favouriteName);
+
+            TextView favouriteName = (TextView)favouriteView.findViewById(R.id.favouriteName);//NAME
             favouriteName.setText(fResultDB.name);
 
-         //   TextView favouriteAddress = (TextView)favouriteView.findViewById(R.id.favouriteAddress);
-            //favouriteAddress.setText(fResultDB.formatted_address);
+            TextView favouriteAddress = (TextView)favouriteView.findViewById(R.id.favouriteAddress);//ADDRESS
+            favouriteAddress.setText(fResultDB.formatted_address);
 
             //latitude comes before longitude
-            //THE REST LATTER
+            TextView favouriteLatitude = (TextView)favouriteView.findViewById(R.id.favouriteLatitude);//LATITUDE
+            favouriteLatitude.setText(favouriteLatitude + " ");
+
+            TextView favouriteLongitude = (TextView)favouriteView.findViewById(R.id.favouriteLongitude);//LONGITUDE
+            favouriteLongitude.setText(favouriteLongitude + " ");
+
+            TextView favouriteDistance = (TextView)favouriteView.findViewById(R.id.favouriteDistance);//DISTANCE
+            //method calculates distances between two points according to their latitude and longitude
+        //    Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryNLatitude,temporaryNLongitude,nearDistanceResults);// IN METERS
+          //  resultNearDistance.setText(nearDistanceResults[0]/1000 + "km");
 
         }
-        /*
-         TextView nearbyName = (TextView) nearView.findViewById(R.id.nearbyName);//NAME
-            nearbyName.setText(nResult.name);
-
-            TextView nearbyAddress = (TextView) nearView.findViewById(R.id.nearbyAddress);//ADDRESS
-            nearbyAddress.setText(nResult.vicinity);
-
-            //latitude comes before longitude
-            TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
-            double temporaryNLatitude = nResult.geometry.location.lat;
-            String convertedNLatitude = String.valueOf(temporaryNLatitude);//you cant setText on double so you need convert it first to String
-            nearLatitude.setText(convertedNLatitude);
-
-            TextView nearLongitude = (TextView) nearView.findViewById(R.id.nearbyLongitude);//LONGITUDE
-            double temporaryNLongitude = nResult.geometry.location.lng;
-            String convertedNLongitude = String.valueOf(temporaryNLongitude);//you cant setText on double so you need convert it first to String
-            nearLongitude.setText(convertedNLongitude);
-         */
     }
 }
 /*

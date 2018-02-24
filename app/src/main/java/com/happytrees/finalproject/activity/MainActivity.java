@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -15,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,6 +60,7 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 // ANOTHER WAY TO MAKE RECYCLER VIEW CLICKABLE IS TO CREATE JAVA CLASS WHICH IMPLEMENTS RecyclerView.OnItemTouchListener  AND WILL HAVE INNER INTERFACE WITH BOTH (CLICK ,LONG CLICK METHODS)
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 //WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DONT NEED USE INTERFACE
+//WITH FRAGMENTS ALWAYS USE .replace()
 
 public class MainActivity extends AppCompatActivity {
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
@@ -72,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //CHANGE ACTION BAR COLOR
+        ActionBar bar =  getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#bf360c")));
 
         //create an instance of the Fused Location Provider Client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);//alternatively you can use Location manager which has different Location Listener
@@ -263,16 +272,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.FavouritesMenuBtn:
                 //call favourites fragment
                 FragmentFavourites fragmentFavourites = new FragmentFavourites();
-                getSupportFragmentManager().beginTransaction().replace(R.id.MainContainer,fragmentFavourites).commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack("favourites").replace(R.id.MainContainer,fragmentFavourites).commit(); //addingToBackStack in this example undoes fragment replacing.Otherwise pushing back button would exist from application(cause it would close activity and there no another activities)
                 break;
+
         }
         return  true;
     }
 }
 
-/*
-     //CREATE AND DISPLAY myListFragment in containerLayout in MainActivity
-        MyListFragment myListFragment = new MyListFragment();
-        myListFragment.setRetainInstance(true);//KEEPS FRAGMENT SAME AFTER ROTATION CHANGE (portrait <-> landscape) --> FIND MORE ELEGANT WAY
-        getFragmentManager().beginTransaction().replace(R.id.MainActLayout,myListFragment).commit();
- */
