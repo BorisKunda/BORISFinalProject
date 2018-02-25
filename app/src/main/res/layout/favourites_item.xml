@@ -21,11 +21,11 @@
 
 
             <TextView
+                android:layout_marginTop="20dp"
                 android:id="@+id/favouriteName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/progress"
                 android:padding="5dp"
                 android:text="Name"
@@ -50,8 +50,12 @@
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="16dp"
                 android:visibility="visible" />
             <!--progress bar makes loading circle -->
             <ImageView
@@ -67,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="260dp"
+                android:layout_marginTop="280dp"
                 android:padding="5dp"
                 android:text="latitude"
                 android:textColor="#c43a08"
@@ -78,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="290dp"
+                android:layout_marginTop="300dp"
                 android:padding="5dp"
                 android:text="longitude"
                 android:textColor="#c43a08"

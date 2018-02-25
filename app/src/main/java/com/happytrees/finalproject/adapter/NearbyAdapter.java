@@ -179,9 +179,3 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     }
 }
-/*
-TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
-            //method calculates distances between two points according to their latitude and longitude
-            Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);// IN METERS
-            resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");
- */

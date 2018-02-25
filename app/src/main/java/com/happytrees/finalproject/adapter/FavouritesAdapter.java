@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.database.ResultDB;
@@ -127,38 +129,33 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
                     }
                 }).into(fImage);//SET IMAGE THROUGH GLIDE
             }
+            //MAKE RECYCLER FAVOURITES CLICKABLE
+            //normal click
+            favouriteView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"click f",Toast.LENGTH_SHORT).show();
+                }
+            });
+            //long click
+            favouriteView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    //REMOVE ITEM FROM DATABASE THEN FROM RECYCLER VIEW
+                    //remove item from database
+                    ResultDB resultDB = ResultDB.findById(ResultDB.class,favouritesList.get(getAdapterPosition()).getId());//we used  "getAdapterPosition()" to get item  position (int).getId used to get id cause in sugar orm you need id in order to remove item
+                    resultDB.delete();
+                    //standard code for removing item from recycler view -> we remove item from list after we removed it from database
+                    favouritesList.remove(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
+                    notifyItemRemoved(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
+                    notifyItemRangeChanged(getAdapterPosition(), favouritesList.size());//we used  "getAdapterPosition()" to get item  position (int)
+
+                    Toast.makeText(context,"item removed",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
 
 
         }
     }
 }
-/*
-
-
-           //we check photos in case some of json objects have no photo_reference       //PHOTOS
-            if (txtResultCurrent.photos == null)
-                Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
-            else if (txtResultCurrent.photos.isEmpty())
-                Log.e("TxtAdapter", "Photos list of search results is empty");//there is string but its empty " "
-            else {
-                String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
-                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
-
-
-                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);//removes progress bar if there was exception
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);////removes progress bar if picture finished loading
-                        return false;
-
-                    }
-
-                }).into(resultImage);//SET IMAGE THROUGH GLIDE
-            }
- */
