@@ -33,6 +33,7 @@ import java.util.List;
 public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
     //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
+    //LINK TO SPECIFIC PLACE ->https://www.google.com/maps/search/?api=1&query=Google&query_place_id=SomeID --> ACCORDING TO PLACE ID
 
     //VARIABLES
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
@@ -40,6 +41,9 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public ArrayList<TxtResult> txtResults;//list of places results
     public Context context;
     public float [] txtDistanceResults = new float[10];//10 random number.you need any number higher than 3
+    public String placeId;
+    public String linkId = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=";
+    public String linkWithId;
 
 
     //constructor
@@ -102,6 +106,10 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             //method calculates distances between two points according to their latitude and longitude
             Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);// IN METERS
             resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");
+
+               //fetch place id
+               placeId =  txtResultCurrent.place_id;  //PLACE ID
+               linkWithId = linkId + placeId;//complete url
 
 
             ImageView resultImage = (ImageView) myView.findViewById(R.id.resultImage);//IMAGE
@@ -167,11 +175,19 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                     });
 
 
-
+                    //SHARE BUTTON
                     builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {//SHARE OPTION
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(context,"Share",Toast.LENGTH_SHORT).show();
+                            //share
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT,"Link : " + " " + linkWithId);
+                            intent.putExtra(Intent.EXTRA_SUBJECT,"check out this cool place !" );
+                            context.startActivity(Intent.createChooser(intent,"SHARE USING"));
+
+                            Toast.makeText(context,"shared",Toast.LENGTH_SHORT).show();
+
                         }
                     });
                     builder.show();
@@ -181,4 +197,5 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
         }
     }
 }
+
 

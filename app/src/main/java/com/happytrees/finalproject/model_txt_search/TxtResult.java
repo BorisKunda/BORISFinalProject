@@ -11,4 +11,5 @@ public class TxtResult {
     public    TxtGeometry geometry;
     public String name;
     public List<TxtPhoto> photos ;
+    public String place_id;
 }
