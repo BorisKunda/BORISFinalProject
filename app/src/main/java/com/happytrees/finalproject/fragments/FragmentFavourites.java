@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.adapter.FavouritesAdapter;
@@ -38,15 +40,42 @@ public class FragmentFavourites extends Fragment {
 
 
         //SETTING RECYCLER VIEW LIST
-        List<ResultDB> favouritesList = ResultDB.listAll(ResultDB.class);//select all items from favourites database and read them
+        final List<ResultDB> favouritesList = ResultDB.listAll(ResultDB.class);//select all items from favourites database and read them
         //setting RecyclerView
         favouriteRecycler = (RecyclerView) v3.findViewById(R.id.recyclerFavourites);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());//layout manager defines look of RecyclerView -- > grid,list
         favouriteRecycler.setLayoutManager(layoutManager);
         //adapter
-        FavouritesAdapter favouritesAdapter = new FavouritesAdapter(favouritesList, getActivity());
+        final FavouritesAdapter favouritesAdapter = new FavouritesAdapter(favouritesList, getActivity());
         favouriteRecycler.setAdapter(favouritesAdapter);
 
+        //INTERFACE ALLOWING LISTENING TO SWEEP ACTIONS
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {//enables sweep left <-> right
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //fetch item position
+                int position = viewHolder.getAdapterPosition();
+                //remove item from database
+                ResultDB resultDB = ResultDB.findById(ResultDB.class,favouritesList.get(position).getId());
+                resultDB.delete();
+                //standard code for removing item from recycler view -> we remove item from list after we removed it from database
+                favouritesList.remove(position);
+                favouritesAdapter.notifyItemRemoved(position);
+                favouritesAdapter.notifyItemRangeChanged(position, favouritesList.size());
+
+                Toast.makeText(getActivity(),"item removed",Toast.LENGTH_SHORT).show();
+
+
+            }
+        };
+        //attach ItemTouchHelper instance  to recycler view through ItemTouchHelper.SimpleCallback instance
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(favouriteRecycler); //set swipe to recylcerview
 
 
 
@@ -57,16 +86,3 @@ public class FragmentFavourites extends Fragment {
 
     }
 }
-/*
-
- List<Location> allLocations = Location.listAll(Location.class);
-        RecyclerView recyclerView = v.findViewById(R.id.locationRecyclerView);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());//layout manager defines look of RecyclerView -- > grid,list
-        recyclerView.setLayoutManager(layoutManager);
-
-        //adapter
-        LocationAdapter locationAdapter = new LocationAdapter(allLocations, getActivity());
-
-        recyclerView.setAdapter(locationAdapter);
- */

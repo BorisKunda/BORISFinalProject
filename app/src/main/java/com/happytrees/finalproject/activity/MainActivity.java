@@ -60,6 +60,7 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 //DELETE LAT/LNG IT WASTES  FREE PLACE
 //onSwipe -> REMOVE FROM FAVOURITE LIST
 //IMPROVE ITEMS LOOK
+//check database for duplicate items
 
 
 //NOTES:

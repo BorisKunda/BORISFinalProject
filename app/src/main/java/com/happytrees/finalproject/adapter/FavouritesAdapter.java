@@ -89,13 +89,13 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             favouriteAddress.setText(fResultDB.formatted_address);
 
             //latitude comes before longitude
-            TextView favouriteLatitude = (TextView) favouriteView.findViewById(R.id.favouriteLatitude);//LATITUDE
+         //   TextView favouriteLatitude = (TextView) favouriteView.findViewById(R.id.favouriteLatitude);//LATITUDE
             double keptLat = fResultDB.lat;
-            favouriteLatitude.setText(fResultDB.lat + " ");
+           // favouriteLatitude.setText(fResultDB.lat + " ");
 
-            TextView favouriteLongitude = (TextView) favouriteView.findViewById(R.id.favouriteLongitude);//LONGITUDE
+         //   TextView favouriteLongitude = (TextView) favouriteView.findViewById(R.id.favouriteLongitude);//LONGITUDE
             double keptLng = fResultDB.lng;
-            favouriteLongitude.setText(fResultDB.lng + " ");
+         //   favouriteLongitude.setText(fResultDB.lng + " ");
 
             TextView favouriteDistance = (TextView) favouriteView.findViewById(R.id.favouriteDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
@@ -134,23 +134,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             favouriteView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"click f",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(context,"click f",Toast.LENGTH_SHORT).show();
                 }
             });
             //long click
             favouriteView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    //REMOVE ITEM FROM DATABASE THEN FROM RECYCLER VIEW
-                    //remove item from database
-                    ResultDB resultDB = ResultDB.findById(ResultDB.class,favouritesList.get(getAdapterPosition()).getId());//we used  "getAdapterPosition()" to get item  position (int).getId used to get id cause in sugar orm you need id in order to remove item
-                    resultDB.delete();
-                    //standard code for removing item from recycler view -> we remove item from list after we removed it from database
-                    favouritesList.remove(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
-                    notifyItemRemoved(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
-                    notifyItemRangeChanged(getAdapterPosition(), favouritesList.size());//we used  "getAdapterPosition()" to get item  position (int)
-
-                    Toast.makeText(context,"item removed",Toast.LENGTH_SHORT).show();
+                  //code
                     return true;
                 }
             });

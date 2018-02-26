@@ -87,16 +87,16 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             resultAddress.setText(txtResultCurrent.formatted_address);
 
             //latitude comes before longitude
-            TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
+         //   TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
             double temporaryLatitude = txtResultCurrent.geometry.location.lat;
             String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
-            resultLatitude.setText(convertedLatitude);
+          //  resultLatitude.setText(convertedLatitude);
 
 
-            TextView resultLongitude = (TextView) myView.findViewById(R.id.txtLongitude);//LONGITUDE
+       //     TextView resultLongitude = (TextView) myView.findViewById(R.id.txtLongitude);//LONGITUDE
             double temporaryLongitude = txtResultCurrent.geometry.location.lng;
             String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
-            resultLongitude.setText(convertedLongitude);
+           // resultLongitude.setText(convertedLongitude);
 
             TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
@@ -182,16 +182,3 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     }
 }
 
-/*
-    if (txtResultCurrent.photos == null)
-                Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
-            else if (txtResultCurrent.photos.isEmpty())
-                Log.e("TxtAdapter", "Photos list of search results is empty");//there is string but its empty " "
-            else {
-                String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
-                String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
- */
-/*
-    ResultDB resultDB = new ResultDB(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng,txtResultCurrent.photos.get(0).photo_reference);
-                            resultDB.save();
- */

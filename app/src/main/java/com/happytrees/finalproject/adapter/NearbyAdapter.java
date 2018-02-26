@@ -88,15 +88,15 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
             nearbyAddress.setText(nResult.vicinity);
 
             //latitude comes before longitude
-            TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
+         //   TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
             double temporaryNLatitude = nResult.geometry.location.lat;
             String convertedNLatitude = String.valueOf(temporaryNLatitude);//you cant setText on double so you need convert it first to String
-            nearLatitude.setText(convertedNLatitude);
+         //   nearLatitude.setText(convertedNLatitude);
 
-            TextView nearLongitude = (TextView) nearView.findViewById(R.id.nearbyLongitude);//LONGITUDE
+         //   TextView nearLongitude = (TextView) nearView.findViewById(R.id.nearbyLongitude);//LONGITUDE
             double temporaryNLongitude = nResult.geometry.location.lng;
             String convertedNLongitude = String.valueOf(temporaryNLongitude);//you cant setText on double so you need convert it first to String
-            nearLongitude.setText(convertedNLongitude);
+         //   nearLongitude.setText(convertedNLongitude);
 
             TextView resultNearDistance = (TextView)nearView.findViewById(R.id.nearDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude

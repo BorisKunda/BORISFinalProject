@@ -24,7 +24,6 @@
             android:layout_marginEnd="23dp"
             android:layout_marginRight="23dp"
             android:layout_marginTop="12dp"
-            android:buttonTint="@color/custom_accent"
             android:text="Text search" />
 
         <RadioButton
@@ -35,7 +34,6 @@
             android:layout_alignStart="@+id/radioButtonTxtSearch"
             android:layout_below="@+id/radioButtonTxtSearch"
             android:layout_marginTop="18dp"
-            android:buttonTint="@color/custom_accent"
             android:text="Nearby Search" />
 
     </RadioGroup>
@@ -57,8 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="700dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
+        />
 
     <Button
         style="@style/Base.Widget.AppCompat.Button.Colored"
