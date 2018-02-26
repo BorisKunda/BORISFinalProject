@@ -3,6 +3,7 @@ package com.happytrees.finalproject.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,6 +42,9 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
     public Context context;
     public float [] nearDistanceResults = new float[10];//10 random number.you need any number higher than 3
     public  String  formatted_address;
+    public String nPlaceId;
+    public String linkId = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=";
+    public String nLinkWithId;
 
     //constructor
     public NearbyAdapter(ArrayList<NearbyResult> nearResults, Context context) {
@@ -102,6 +106,10 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
             //method calculates distances between two points according to their latitude and longitude
             Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryNLatitude,temporaryNLongitude,nearDistanceResults);// IN METERS
             resultNearDistance.setText(nearDistanceResults[0]/1000 + "km");
+
+            //fetch place id
+            nPlaceId = nResult.place_id;
+            nLinkWithId = linkId + nPlaceId;//complete link with id
 
 
             ImageView nImage = (ImageView) nearView.findViewById(R.id.nearbyImage);//IMAGE
@@ -168,7 +176,15 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
                     builder.setNegativeButton("Share", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(context,"Share",Toast.LENGTH_SHORT).show();
+                        //share
+                            Intent nIntent = new Intent(Intent.ACTION_SEND);
+                            nIntent.setType("text/plain");
+                            nIntent.putExtra(Intent.EXTRA_TEXT,"Link : " + nLinkWithId);
+                            nIntent.putExtra(Intent.EXTRA_SUBJECT,"check out this cool place near me ! ");
+                            context.startActivity(Intent.createChooser(nIntent, "SHARE USING "));
+
+                            Toast.makeText(context,"shared",Toast.LENGTH_SHORT).show();
+
                         }
                     });
                     builder.show();

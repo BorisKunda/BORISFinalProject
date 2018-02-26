@@ -11,6 +11,7 @@ public class NearbyResult {
     public String vicinity;//address
     public NearbyGeometry geometry;
     public List<NearbyPhoto> photos;
+    public String place_id;
 
 
 }
