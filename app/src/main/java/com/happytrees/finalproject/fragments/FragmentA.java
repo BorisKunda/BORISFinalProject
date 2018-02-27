@@ -1,6 +1,7 @@
 package com.happytrees.finalproject.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,6 +81,16 @@ public class FragmentA extends Fragment {
         edtSearch = (EditText) v.findViewById(R.id.editTextSearch);
         //GET STRING VALUE FROM EDIT TEXT
 
+           //PROGRESS BAR
+        // Set up progress before call
+       final ProgressDialog progressDoalog;
+        progressDoalog = new ProgressDialog(getActivity());
+        progressDoalog.setMessage("Its loading....");
+        progressDoalog.setTitle("ProgressDialog bar ");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
+
 
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +104,7 @@ public class FragmentA extends Fragment {
                     Log.e("TAG", fromEdtTxt+"A");
                     //text search call
                     Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
+                    progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
                     call.enqueue(new Callback<TxtResponse>() {
                         @Override
                         public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
@@ -110,12 +122,14 @@ public class FragmentA extends Fragment {
                             RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                             fragArecycler.setAdapter(myTxtAdapter);
                             myTxtAdapter.notifyDataSetChanged();//refresh
+                            progressDoalog.dismiss();//dismiss progress bar after call was completed
                             Log.e("TxtResults", " very good: " + response.body());
 
                         }
 
                         @Override
                         public void onFailure(Call<TxtResponse> call, Throwable t) {
+                            progressDoalog.dismiss();//dismiss progress bar after call was completed
                             Log.e("TxtResults", " bad: " + t);
                         }
                     });
@@ -132,6 +146,7 @@ public class FragmentA extends Fragment {
                     newNLocation = convertedFUpLatitude + comma + convertedFUpLongitude;
                     //nearby search call
                     Call<NearbyResponse> nCall = apiService.getNearbyResults(newNLocation, radius, fromEdtTxt, key);
+                    progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
                     nCall.enqueue(new Callback<NearbyResponse>() {
                         @Override
                         public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
@@ -151,12 +166,15 @@ public class FragmentA extends Fragment {
                             fragArecycler.setAdapter(myNearAdapter);
                             myNearAdapter.notifyDataSetChanged();//refresh
 
+                            progressDoalog.dismiss();//dismiss progress bar after call was completed
+
                             Log.e("TxtResults", " very good: " + response.body());
 
                         }
 
                         @Override
                         public void onFailure(Call<NearbyResponse> call, Throwable t) {
+                            progressDoalog.dismiss();//dismiss progress bar after call was completed
                             Log.e("NearResults", " bad: " + t);
 
                         }
