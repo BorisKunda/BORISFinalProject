@@ -179,7 +179,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
                         //share
                             Intent nIntent = new Intent(Intent.ACTION_SEND);
                             nIntent.setType("text/plain");
-                            nIntent.putExtra(Intent.EXTRA_TEXT,"Link : " + nLinkWithId);
+                            nIntent.putExtra(Intent.EXTRA_TEXT,"visit this cool place near me  :)  : " + nLinkWithId);
                             nIntent.putExtra(Intent.EXTRA_SUBJECT,"check out this cool place near me ! ");
                             context.startActivity(Intent.createChooser(nIntent, "SHARE USING "));
 

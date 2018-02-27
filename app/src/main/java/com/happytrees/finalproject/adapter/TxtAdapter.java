@@ -182,7 +182,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                             //share
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
-                            intent.putExtra(Intent.EXTRA_TEXT,"Link : " + " " + linkWithId);
+                            intent.putExtra(Intent.EXTRA_TEXT,"visit this cool place :) " + " " + linkWithId);
                             intent.putExtra(Intent.EXTRA_SUBJECT,"check out this cool place !" );
                             context.startActivity(Intent.createChooser(intent,"SHARE USING"));
 
