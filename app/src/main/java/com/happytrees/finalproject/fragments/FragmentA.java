@@ -95,7 +95,14 @@ public class FragmentA extends Fragment {
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
+
+                //check if edit text empty
+                if(edtSearch.length()!=0) {
+                    fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
+                }else{
+                    Toast.makeText(getActivity(),"please write something",Toast.LENGTH_SHORT).show();
+                }
+
                 //NOTHING SELECTED
                 if(!txtChecked&&!nearChecked) {
                     Toast.makeText(getActivity(),"please choose an option",Toast.LENGTH_SHORT).show();
@@ -228,3 +235,10 @@ public class FragmentA extends Fragment {
     }
 
 }
+/*
+if(edtImageUrl.length()!=0) {
+                    stringUrl = edtImageUrl.getText().toString();//if you would wrote this line before showbutton code it wouldn't work cause there no text yet in edit text
+                    Picasso.with(Details.this).load(stringUrl).into(imageFromUrl);
+                }else{
+                    Toast.makeText(Details.this,"please provide image URl",Toast.LENGTH_SHORT).show();
+ */
