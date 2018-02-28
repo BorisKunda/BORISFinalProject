@@ -23,6 +23,7 @@ import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.database.ResultDB;
 import com.happytrees.finalproject.fragments.FragmentA;
+import com.happytrees.finalproject.fragments.FragmentChanger;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
     //VARIABLES
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-    public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
+    public String urlPartfinal = "&key=AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";
     public ArrayList<TxtResult> txtResults;//list of places results
     public Context context;
     public float [] txtDistanceResults = new float[10];//10 random number.you need any number higher than 3
@@ -92,13 +93,13 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
             //latitude comes before longitude
          //   TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
-            double temporaryLatitude = txtResultCurrent.geometry.location.lat;
+            final double temporaryLatitude = txtResultCurrent.geometry.location.lat;
             String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
           //  resultLatitude.setText(convertedLatitude);
 
 
        //     TextView resultLongitude = (TextView) myView.findViewById(R.id.txtLongitude);//LONGITUDE
-            double temporaryLongitude = txtResultCurrent.geometry.location.lng;
+            final double temporaryLongitude = txtResultCurrent.geometry.location.lng;
             String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
            // resultLongitude.setText(convertedLongitude);
 
@@ -149,7 +150,10 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             myView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,txtResultCurrent.name,Toast.LENGTH_SHORT).show();
+              //      Toast.makeText(context,txtResultCurrent.name,Toast.LENGTH_SHORT).show();
+                    //instance of FragmentChanger interface
+                    FragmentChanger fragmentChanger = (FragmentChanger)context;
+                    fragmentChanger.changeFragments(temporaryLatitude,temporaryLongitude,txtResultCurrent.name);
                 }
             });
             //LONG CLICK

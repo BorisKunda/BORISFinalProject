@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <application
         android:name="com.orm.SugarApp"
@@ -27,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB2GSEnjScNhcRs_vvEfIR-bRP0Z6IRH5w"/><!--GOOGLE API KEY-->
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY"/><!--GOOGLE API KEY-->
     </application>
 
 </manifest>

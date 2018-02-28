@@ -15,7 +15,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
+import android.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -25,25 +25,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.fragments.FragmentA;
-import com.happytrees.finalproject.fragments.FragmentB;
+import com.happytrees.finalproject.fragments.FragmentChanger;
 import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //YET TO COME:
+//CHECK IF INTERNET ENABLED
 //SAVE INSTANCE ON ROTATION CHANGE
 //ADD BROADCAST RECEIVER FOR GPS AND BATTERY
 //MAP WITH MARKER
@@ -60,10 +65,14 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //NOTES:
+//GOOGLE API HAS LOTS OF DIFFERENT API'S SUCH AS : GOOGLE PLACES API,GOOGLE MAPS API ETC. YOU MUST ENABLE ALL OF THEM IN DEVELOPER CONSOLE FOR YOUR APP PROPER PERFORMANCE
+//IMPORT OF FRAGMENT ITSELF AND OF FRAGMENT MANAGER SUPPOSED TO BE OF ONE TYPE ONLY -> NORMAL OT SUPPORT ONE.MIXING THESE TWO TYPES WILL CRASH YOUR APP
+//NEVER SET MESSAGES IN Log.e
 // ANOTHER WAY TO MAKE RECYCLER VIEW CLICKABLE IS TO CREATE JAVA CLASS WHICH IMPLEMENTS RecyclerView.OnItemTouchListener  AND WILL HAVE INNER INTERFACE WITH BOTH (CLICK ,LONG CLICK METHODS)
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 //WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DONT NEED TO  USE INTERFACE .YOU NEED CREATE   INTERFACE IN CASE OF FRAGMENT<->FRAGMENT INTERACTION
 //WITH FRAGMENTS ALWAYS USE .replace()
+//NEVER PUT LOG MESSAGES ON Log.e
 
 
 // DELETE ALL DB
@@ -71,7 +80,7 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
         Location.deleteAll(Location.class); */
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements FragmentChanger{
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
 
     //VARIABLES
@@ -80,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     LocationRequest mLocationRequest;
     public static final int REQUEST_CODE_LOCATION = 4;
     public static double upLatitude,upLongitude;//updated current position's latitude and longitude made as static in order to be accessible in both  Adapter java classes
+    public LatLng customLatLng;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,17 +143,9 @@ public class MainActivity extends AppCompatActivity {
 
         //INIT FRAGMENT A
         FragmentA fragmentA = new FragmentA();//generate a new Fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();//call the Fragment Manager
+        FragmentManager fragmentManager = getFragmentManager();//call the Fragment Manager
         fragmentManager.beginTransaction().replace(R.id.MainContainer, fragmentA).commit();//add the fragment to the layout
 
-
-        if (isTablet())//means device used xlarge xml layout of MainActivity,due to device large screen(tablet)
-        {
-            //INIT FRAGMENT B
-            FragmentB fragmentB = new FragmentB();
-
-            fragmentManager.beginTransaction().replace(R.id.ExtraContainer, fragmentB).commit();//we add FragmentB only to sub layout of xlarge MainActivity called ExtraContainer ,and only if its not null(its null if device detected normal size screen)
-        }
 
 
     }
@@ -281,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.FavouritesMenuBtn:
                 //call favourites fragment
                 FragmentFavourites fragmentFavourites = new FragmentFavourites();
-                getSupportFragmentManager().beginTransaction().addToBackStack("favourites").replace(R.id.MainContainer,fragmentFavourites).commit(); //addingToBackStack in this example undoes fragment replacing.Otherwise pushing back button would exist from application(cause it would close activity and there no another activities)
+                getFragmentManager().beginTransaction().addToBackStack("favourites").replace(R.id.MainContainer,fragmentFavourites).commit(); //addingToBackStack in this example undoes fragment replacing.Otherwise pushing back button would exist from application(cause it would close activity and there no another activities)
                 break;
             case R.id.ExitMenuBtn:
                 finish();//closes current activity and its associated fragments
@@ -289,6 +293,39 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return  true;
+    }
+
+    @Override
+    public void changeFragments(double lat, double lng, final String name) {
+        customLatLng = new LatLng(lat,lng);
+        //CREATES MAP FRAGMENT ->  no need to create java,xml file for it .No need in creating GPS object and make Location Permission in manifest.Only key cause you using google API
+        MapFragment mapFragment = new MapFragment();
+        if(isTablet()) {//isTablet = true .Means device used xlarge xml layout of MainActivity,due to device large screen(tablet)
+            getFragmentManager().beginTransaction().addToBackStack("adding map").replace(R.id.ExtraContainer, mapFragment).commit(); //we add MapFragment  only  to sub layout of xlarge MainActivity called ExtraContainer ,and only if its not null(its null if device detected normal size screen)
+        }else{
+            getFragmentManager().beginTransaction().addToBackStack("replacing").replace(R.id.MainContainer, mapFragment).commit();//replaces current Fragment with mapFragment.
+        }
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                googleMap.addMarker(new MarkerOptions().position(customLatLng).title(name));//add marker
+
+                //additionally you can look up your current location in map if you have granted permission for thatjh
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+                    googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                        @Override
+                        public boolean onMyLocationButtonClick() {
+                            Toast.makeText(MainActivity.this,"You are here",Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                }
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customLatLng, 17));//v --> is zoom.0 is no zoom
+            }
+        });
     }
 }
 

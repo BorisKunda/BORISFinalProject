@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.database.ResultDB;
+import com.happytrees.finalproject.fragments.FragmentChanger;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-    public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
+    public String urlPartfinal = "&key=AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";
     public ArrayList<NearbyResult> nearResults;//list of places results
     public Context context;
     public float [] nearDistanceResults = new float[10];//10 random number.you need any number higher than 3
@@ -93,12 +94,12 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
             //latitude comes before longitude
          //   TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
-            double temporaryNLatitude = nResult.geometry.location.lat;
+            final double temporaryNLatitude = nResult.geometry.location.lat;
             String convertedNLatitude = String.valueOf(temporaryNLatitude);//you cant setText on double so you need convert it first to String
          //   nearLatitude.setText(convertedNLatitude);
 
          //   TextView nearLongitude = (TextView) nearView.findViewById(R.id.nearbyLongitude);//LONGITUDE
-            double temporaryNLongitude = nResult.geometry.location.lng;
+            final double temporaryNLongitude = nResult.geometry.location.lng;
             String convertedNLongitude = String.valueOf(temporaryNLongitude);//you cant setText on double so you need convert it first to String
          //   nearLongitude.setText(convertedNLongitude);
 
@@ -143,12 +144,17 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
             }
             //MAKE RECYCLER NEARBY CLICKABLE
+            //normal click
             nearView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,nResult.name,Toast.LENGTH_SHORT).show();
+              //      Toast.makeText(context,nResult.name,Toast.LENGTH_SHORT).show();
+                    //instance of FragmentChanger interface
+                    FragmentChanger fragmentChanger = (FragmentChanger)context;
+                    fragmentChanger.changeFragments(temporaryNLatitude,temporaryNLongitude,nResult.name);
                 }
             });
+            //long click
             nearView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

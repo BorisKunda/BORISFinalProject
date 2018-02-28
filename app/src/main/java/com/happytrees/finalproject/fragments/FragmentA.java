@@ -3,7 +3,7 @@ package com.happytrees.finalproject.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,7 +47,7 @@ public class FragmentA extends Fragment {
     String newNLocation;
     String radius = "2500";//I set 2500 meters temporary cause there no food around GANEY AVIV in nearby search radius 500m.
     //VARIABLES SHARED BOTH BY SEARCHERS
-    String key = "AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ";//no need in decode
+    String key = "AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";//no need in decode
     EditText edtSearch;
     String fromEdtTxt;
     boolean txtChecked,nearChecked =false;//both false by default
