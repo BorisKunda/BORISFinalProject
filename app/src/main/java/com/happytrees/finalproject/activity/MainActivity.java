@@ -310,19 +310,6 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
             public void onMapReady(GoogleMap googleMap) {
                 googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.addMarker(new MarkerOptions().position(customLatLng).title(name));//add marker
-
-                //additionally you can look up your current location in map if you have granted permission for thatjh
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    googleMap.setMyLocationEnabled(true);
-                    googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                        @Override
-                        public boolean onMyLocationButtonClick() {
-                            Toast.makeText(MainActivity.this,"You are here",Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-                }
-
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customLatLng, 17));//v --> is zoom.0 is no zoom
             }
         });
