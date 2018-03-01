@@ -50,6 +50,7 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //YET TO COME:
+//DIFFERENT SCREENS SUPPORT
 //OFFLINE/ONLINE WITH SYMBOLS
 //COLORFUL TOASTY
 //CHECK IF INTERNET ENABLED
@@ -333,6 +334,9 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
                 FragmentFavourites fragmentFavourites = new FragmentFavourites();
                 getFragmentManager().beginTransaction().addToBackStack("favourites").replace(R.id.MainContainer,fragmentFavourites).commit(); //addingToBackStack in this example undoes fragment replacing.Otherwise pushing back button would exist from application(cause it would close activity and there no another activities)
                 break;
+
+            case R.id.SettingsMenuBtn:
+                Toast.makeText(this,"settings",Toast.LENGTH_SHORT).show();
             case R.id.ExitMenuBtn:
                 finish();//closes current activity and its associated fragments
                 break;

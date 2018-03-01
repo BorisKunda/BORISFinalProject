@@ -6,8 +6,13 @@
         android:icon="@drawable/star"
         android:id="@+id/FavouritesMenuBtn"/>
 
+    <item android:title="Settings"
+        android:id="@+id/SettingsMenuBtn"/>
+
     <item android:title="Exit"
         android:id="@+id/ExitMenuBtn"/>
+
+
 
 
 </menu>
