@@ -3,9 +3,11 @@ package com.happytrees.finalproject.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -48,6 +50,8 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //YET TO COME:
+//OFFLINE/ONLINE WITH SYMBOLS
+//COLORFUL TOASTY
 //CHECK IF INTERNET ENABLED
 //SAVE INSTANCE ON ROTATION CHANGE
 //ADD BROADCAST RECEIVER FOR GPS AND BATTERY
@@ -65,6 +69,8 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 
 
 //NOTES:
+//BROADCAST RECEIVER SHOULD BE UNREGISTERED onPause,if not unregistered it will continue receive broadcasts even when app is no longer active
+//BROADCAST RECEIVER SHOULD BE REGISTERED onResume if was previously unregistered onPause,otherwise it will cease to function after app was brought to background once
 //GOOGLE API HAS LOTS OF DIFFERENT API'S SUCH AS : GOOGLE PLACES API,GOOGLE MAPS API ETC. YOU MUST ENABLE ALL OF THEM IN DEVELOPER CONSOLE FOR YOUR APP PROPER PERFORMANCE
 //IMPORT OF FRAGMENT ITSELF AND OF FRAGMENT MANAGER SUPPOSED TO BE OF ONE TYPE ONLY -> NORMAL OT SUPPORT ONE.MIXING THESE TWO TYPES WILL CRASH YOUR APP
 //NEVER SET MESSAGES IN Log.e
@@ -84,12 +90,18 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
 //https://www.google.co.il/maps/@32.0662593,34.7698209,15z --> put here your latitude , longitude
 
     //VARIABLES
+    //maps
     public FusedLocationProviderClient mFusedLocationClient;
     public LocationCallback mLocationCallback;
     LocationRequest mLocationRequest;
     public static final int REQUEST_CODE_LOCATION = 4;
     public static double upLatitude,upLongitude;//updated current position's latitude and longitude made as static in order to be accessible in both  Adapter java classes
     public LatLng customLatLng;
+    //broadcasts
+    public  PowerConnectedBCReceiver myPowerConnectedBCReceiver;
+    public IntentFilter intentPowerOn;
+    public IntentFilter intentPowerOff;
+
 
 
 
@@ -102,6 +114,7 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         //CHANGE ACTION BAR COLOR
         ActionBar bar =  getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#bf360c")));
+
 
         //create an instance of the Fused Location Provider Client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);//alternatively you can use Location manager which has different Location Listener
@@ -147,10 +160,36 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         fragmentManager.beginTransaction().replace(R.id.MainContainer, fragmentA).commit();//add the fragment to the layout
 
 
+        //BROADCAST RECEIVERS-> LISTENING TO IF POWER SOURCE CONNECTED/DISCONNECTED
+
+       //create new instance of broadcast receiver
+        myPowerConnectedBCReceiver = new PowerConnectedBCReceiver();
+
+        //set new intent filters
+
+        //when power source connected
+        intentPowerOn = new IntentFilter();
+        intentPowerOn.addAction("android.intent.action.ACTION_POWER_CONNECTED");
+        registerReceiver(myPowerConnectedBCReceiver, intentPowerOn);//register receiver
+        //alternate writing
+      //   IntentFilter  intentPowerOn= new IntentFilter("android.intent.action.ACTION_POWER_CONNECTED");
+      //  IntentFilter  intentPowerOn = new IntentFilter(Intent.ACTION_POWER_CONNECTED);
+
+        //when power source disconnected
+        intentPowerOff = new IntentFilter();
+        intentPowerOff.addAction("android.intent.action.ACTION_POWER_DISCONNECTED");
+        registerReceiver(myPowerConnectedBCReceiver,intentPowerOff);//register receiver
+        //alternate writing
+        //   IntentFilter  intentPowerOff= new IntentFilter("android.intent.action.ACTION_POWER_DISCONNECTED");
+        //  IntentFilter  intentPowerOff = new IntentFilter(Intent.ACTION_POWER_DISCONNECTED);
+
+
+        //we still need unregister these receivers onPause(so they will not continue receive broadcasts when app is brought to background) and  register them back onResume(when app brought back to foreground)
+
 
     }
 
-    ////////////////////////////////////////////////////////////////////////METHODS////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////METHODS/INNER CLASSES////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //METHOD CHECKS IF DEVICE HAS XLARGE SCREEN.IF IT DOES IT PUTS BOTH FRAGMENT A AND B INSIDE SCREEN
     public boolean isTablet() {
@@ -258,10 +297,14 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
     @Override
     public void onPause() {
         super.onPause();
+
         //stop location updates when Activity is no longer active
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+
+        //unregister broadcast receivers when app being brought to background state
+        unregisterReceiver(myPowerConnectedBCReceiver);
     }
 
     @Override
@@ -271,6 +314,9 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         }else{
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());//update only if there is permission
         }
+        //reregister background receivers back when app returns to active state
+        registerReceiver(myPowerConnectedBCReceiver, intentPowerOn);
+        registerReceiver(myPowerConnectedBCReceiver,intentPowerOff);
     }
     //MENU
     @Override
@@ -314,5 +360,18 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
             }
         });
     }
-}
+    //INNER CLASS--> RECEIVE RESPONSE FROM BROADCASTS
+    public class  PowerConnectedBCReceiver  extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
+                Toast.makeText(MainActivity.this,"connected to power source",Toast.LENGTH_SHORT).show();
+            } else if(intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                Toast.makeText(MainActivity.this,"disconnected from power source",Toast.LENGTH_SHORT).show();
+            }
+        }
+        }
+    }
+
 
