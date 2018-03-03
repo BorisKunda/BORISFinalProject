@@ -48,6 +48,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public String linkId = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=";
     public String linkWithId;
     public String preference = "kilometre";//default value of distance measurement units
+    public double roundedDis;//rounded value of distance (less numbers after dot)
 
 
 
@@ -123,9 +124,11 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
             //GOOD IDEA IF YOU TRY TO ROUND UP NUMBERS!!!!!!!!!!!!!!!
             if(preference.equals("kilometre") ) {
-                   resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");//km
+                roundedDis =  (double)Math.round( (txtDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+                  resultTxtDistance.setText(roundedDis + " km ");//km
             }else{
-                   resultTxtDistance.setText((txtDistanceResults[0]*0.621371)/1000 + "  miles");//miles
+                roundedDis =  (double)Math.round( (((txtDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+                   resultTxtDistance.setText(roundedDis + "  miles");//miles
             }
 
 
@@ -224,3 +227,9 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 }
 
 
+/*
+   b =    (double)Math.round(a * 100d) / 100d;//number of zeros must be same in and outside parenthesis.this number will be equal to size of rounding
+	 b  == > 3.77 after round up ==> two numbers after dot just like "100d" has two zeros
+
+a can be float
+ */
