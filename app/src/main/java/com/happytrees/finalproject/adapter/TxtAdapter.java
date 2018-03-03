@@ -113,7 +113,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
             TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
-            Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);// IN METERS
+            Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);//DEFAULT IN KILOMETERS
 
 
             //FETCH SETTINGS RESULTS FROM SharedPreferences
@@ -122,7 +122,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             //get value from SharedPrefs
             preference = sharedPreferences.getString("list_preference_units", "kilometre");//list_preference_units is key(id) of preference item in preferences.xml
 
-            //GOOD IDEA IF YOU TRY TO ROUND UP NUMBERS!!!!!!!!!!!!!!!
+            //check settings results
             if(preference.equals("kilometre") ) {
                 roundedDis =  (double)Math.round( (txtDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
                   resultTxtDistance.setText(roundedDis + " km ");//km
@@ -227,9 +227,3 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 }
 
 
-/*
-   b =    (double)Math.round(a * 100d) / 100d;//number of zeros must be same in and outside parenthesis.this number will be equal to size of rounding
-	 b  == > 3.77 after round up ==> two numbers after dot just like "100d" has two zeros
-
-a can be float
- */
