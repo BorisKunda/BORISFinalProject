@@ -2,8 +2,10 @@ package com.happytrees.finalproject.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,7 +47,7 @@ public class FragmentA extends Fragment {
 
     //FOR NEARBY SEARCH
     String newNLocation;
-    String radius = "2500";//I set 2500 meters temporary cause there no food around GANEY AVIV in nearby search radius 500m.
+    String radius = "500";//Default radius
     //VARIABLES SHARED BOTH BY SEARCHERS
     String key = "AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";//no need in decode
     EditText edtSearch;
@@ -88,6 +90,14 @@ public class FragmentA extends Fragment {
         progressDoalog.setMessage("Its loading....");
         progressDoalog.setTitle("ProgressDialog bar ");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+
+
+        //FETCH SETTINGS RESULTS FROM SharedPreferences
+        //set Shared Preferences (there you save settings values )
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //get value from SharedPrefs
+        radius = sharedPreferences.getString("list_preference_radius", "500");//list_preference_radius is key(id) of preference item in preferences.xml
 
 
 
@@ -236,9 +246,18 @@ public class FragmentA extends Fragment {
 
 }
 /*
-if(edtImageUrl.length()!=0) {
-                    stringUrl = edtImageUrl.getText().toString();//if you would wrote this line before showbutton code it wouldn't work cause there no text yet in edit text
-                    Picasso.with(Details.this).load(stringUrl).into(imageFromUrl);
-                }else{
-                    Toast.makeText(Details.this,"please provide image URl",Toast.LENGTH_SHORT).show();
+
+        //set Shared Preferences (there you save settings values )
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        //get value from SharedPrefs
+        String showInList = sharedPreferences.getString("list_preference", "list");//list_preference is key(id) of preference item in preferences.xml
+
+        if(showInList.equals("List")) {//means user chose List radio button option in ListDisplayPrefs
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));//makes recycler view list
+        }
+        else//means user chose "Grid"
+        {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        }
  */

@@ -53,6 +53,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     //create ViewHolder
     @Override
     public FavouritesAdapter.FavouritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // generate view and viewHolder
         View fView = LayoutInflater.from(context).inflate(R.layout.favourites_item, null);
         FavouritesViewHolder favouritesViewHolder = new FavouritesViewHolder(fView);
         return favouritesViewHolder;
@@ -60,6 +61,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     @Override
     public void onBindViewHolder(FavouritesAdapter.FavouritesViewHolder holder, int position) {
+        //bind data to view holder
         ResultDB dbResult = favouritesList.get(position);
         holder.bindDataFromArrayToView(dbResult);
     }
@@ -79,7 +81,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             favouriteView = itemView;
         }
 
-        //custom method we need to define
+        // create public  method that binds the data
         public void bindDataFromArrayToView(final ResultDB fResultDB) {
 
             TextView favouriteName = (TextView) favouriteView.findViewById(R.id.favouriteName);//NAME

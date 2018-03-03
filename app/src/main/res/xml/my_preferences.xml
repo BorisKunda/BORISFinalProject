@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+<PreferenceCategory
+    android:key="settings title"
+    android:title="Settings">
+
+
+    <ListPreference
+        android:dialogTitle="Set Display of list"
+        android:entries="@array/radius"
+        android:entryValues="@array/radius"
+        android:key="list_preference_radius"
+        android:summary="radius (in meters ) of nearby search "
+        android:title="radius length" />
+
+
+
+</PreferenceCategory>
+
+</PreferenceScreen>
+
+    <!--NOTES:-->
+
+    <!--"key" is instead id-->
+
+    <!-- checkbox  : Shows an item with a checkbox for a setting that is either enabled or disabled. The saved value is a boolean (true if it's checked).-->
+
+    <!--ListPreference : Opens a dialog with a list of radio buttons. The saved value can be any one of the supported value types .Set its values through strings.xml-->
+
+    <!--EditTextPreference : Opens a dialog with an EditText widget. The saved value is a String. -->
+
+    <!--android:summary : gives info about specific preference item -->
+
+    <!--SwitchPreference : uses a switch to persist a boolean (true when on, false when off)-->

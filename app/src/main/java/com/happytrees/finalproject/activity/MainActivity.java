@@ -47,6 +47,7 @@ import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.fragments.FragmentChanger;
 import com.happytrees.finalproject.fragments.FragmentFavourites;
+import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 
 
 //YET TO COME:
@@ -337,6 +338,9 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
 
             case R.id.SettingsMenuBtn:
                 Toast.makeText(this,"settings",Toast.LENGTH_SHORT).show();
+                getFragmentManager().beginTransaction().addToBackStack("Settings").replace(R.id.MainContainer,new MyPreferencesFragment()).commit();
+                break;
+
             case R.id.ExitMenuBtn:
                 finish();//closes current activity and its associated fragments
                 break;

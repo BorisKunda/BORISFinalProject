@@ -56,6 +56,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
     //create ViewHolder
     @Override
     public NearbyAdapter.NearbyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // generate view and viewHolder
         View nView = LayoutInflater.from(context).inflate(R.layout.nearby_result_item_layout, null);//getContext refers to get value of context variable
         NearbyViewHolder nearbyViewHolder = new NearbyViewHolder(nView);
         return nearbyViewHolder;//In the onCreateViewHolder() method we inflate the row layout as a View and return as ViewHolder object.
@@ -63,6 +64,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     @Override
     public void onBindViewHolder(NearbyAdapter.NearbyViewHolder holder, int position) {
+        //bind data to view holder
         NearbyResult nearbyResultObj = nearResults.get(position);
         holder.bindDataFromArrayToView(nearbyResultObj);
     }

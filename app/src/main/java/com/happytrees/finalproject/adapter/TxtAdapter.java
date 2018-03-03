@@ -55,6 +55,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
     @Override
     public TxtHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // generate view and viewHolder
         View view = LayoutInflater.from(context).inflate(R.layout.txt_result_item_layout, null);//getContext refers to get value of context variable
         TxtHolder txtHolder = new TxtHolder(view);
         return txtHolder;//In the onCreateViewHolder() method we inflate the row layout as a View and return as ViewHolder object.
@@ -62,6 +63,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
     @Override
     public void onBindViewHolder(TxtHolder holder, int position) {
+        //bind data to view holder
         TxtResult txtResultobject = txtResults.get(position);
         holder.bindDataFromArrayToView(txtResultobject);
     }
