@@ -81,11 +81,9 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 //WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DONT NEED TO  USE INTERFACE .YOU NEED CREATE   INTERFACE IN CASE OF FRAGMENT<->FRAGMENT INTERACTION
 //WITH FRAGMENTS ALWAYS USE .replace()
 //NEVER PUT LOG MESSAGES ON Log.e
+//SYMBOLS DIALOG
 
 
-// DELETE ALL DB
-     /*  List<Location> allContacts = Location.listAll(Location.class);
-        Location.deleteAll(Location.class); */
 
 
 public class MainActivity extends AppCompatActivity  implements FragmentChanger{

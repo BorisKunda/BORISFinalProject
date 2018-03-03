@@ -6,6 +6,11 @@
     android:title="Settings">
 
 
+    <Preference
+        android:title = "Delete all favourites"
+        android:key="remove_favourites">
+    </Preference>
+
     <ListPreference
         android:dialogTitle="choose one of the following"
         android:entries="@array/radius"
@@ -41,3 +46,5 @@
     <!--android:summary : gives info about specific preference item -->
 
     <!--SwitchPreference : uses a switch to persist a boolean (true when on, false when off)-->
+
+    <!--Preference : just regular preference item-->
