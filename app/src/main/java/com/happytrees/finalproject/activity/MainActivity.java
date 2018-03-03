@@ -337,7 +337,6 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
                 break;
 
             case R.id.SettingsMenuBtn:
-                Toast.makeText(this,"settings",Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction().addToBackStack("Settings").replace(R.id.MainContainer,new MyPreferencesFragment()).commit();
                 break;
 

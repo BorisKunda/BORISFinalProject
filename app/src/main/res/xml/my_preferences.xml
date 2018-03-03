@@ -7,12 +7,20 @@
 
 
     <ListPreference
-        android:dialogTitle="Set Display of list"
+        android:dialogTitle="choose one of the following"
         android:entries="@array/radius"
         android:entryValues="@array/radius"
         android:key="list_preference_radius"
         android:summary="radius (in meters ) of nearby search "
         android:title="radius length" />
+
+    <ListPreference
+        android:dialogTitle="choose one of the following"
+        android:entries="@array/units"
+        android:entryValues="@array/units"
+        android:key="list_preference_units"
+        android:summary="units for measuring distance"
+        android:title="units" />
 
 
 

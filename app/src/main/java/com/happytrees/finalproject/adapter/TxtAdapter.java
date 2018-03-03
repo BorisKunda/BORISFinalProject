@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +47,9 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
     public String placeId;
     public String linkId = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=";
     public String linkWithId;
+    public String preference = "kilometre";//default value of distance measurement units
+
+
 
 
     //constructor
@@ -108,7 +113,21 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
             Location.distanceBetween(MainActivity.upLatitude,MainActivity.upLongitude,temporaryLatitude,temporaryLongitude,txtDistanceResults);// IN METERS
-            resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");
+
+
+            //FETCH SETTINGS RESULTS FROM SharedPreferences
+            //set Shared Preferences (there you save settings values )
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            //get value from SharedPrefs
+            preference = sharedPreferences.getString("list_preference_units", "kilometre");//list_preference_units is key(id) of preference item in preferences.xml
+
+            //GOOD IDEA IF YOU TRY TO ROUND UP NUMBERS!!!!!!!!!!!!!!!
+            if(preference.equals("kilometre") ) {
+                   resultTxtDistance.setText(txtDistanceResults[0]/1000 + "km");//km
+            }else{
+                   resultTxtDistance.setText((txtDistanceResults[0]*0.621371)/1000 + "  miles");//miles
+            }
+
 
                //fetch place id
                placeId =  txtResultCurrent.place_id;  //PLACE ID
