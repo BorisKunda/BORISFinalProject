@@ -223,20 +223,3 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     }
 }
-/*
-    //FETCH SETTINGS RESULTS FROM SharedPreferences
-            //set Shared Preferences (there you save settings values )
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            //get value from SharedPrefs
-            preference = sharedPreferences.getString("list_preference_units", "kilometre");//list_preference_units is key(id) of preference item in preferences.xml
-
-            //GOOD IDEA IF YOU TRY TO ROUND UP NUMBERS!!!!!!!!!!!!!!!
-            if(preference.equals("kilometre") ) {
-                roundedDis =  (double)Math.round( (txtDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
-                  resultTxtDistance.setText(roundedDis + " km ");//km
-            }else{
-                roundedDis =  (double)Math.round( (((txtDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
-                   resultTxtDistance.setText(roundedDis + "  miles");//miles
-            }
-
- */

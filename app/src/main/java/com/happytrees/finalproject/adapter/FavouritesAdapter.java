@@ -1,7 +1,9 @@
 package com.happytrees.finalproject.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
     public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
     public float[] fDistanceResults = new float[10];//10 random number.you need any number higher than 3
+    public String fPreference = "kilometre";//default value of distance measurement units
+    public double roundedFDis;//rounded value of distance (less numbers after dot)
 
 
     //constructor
@@ -101,8 +105,24 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
             TextView favouriteDistance = (TextView) favouriteView.findViewById(R.id.favouriteDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
-            Location.distanceBetween(MainActivity.upLatitude, MainActivity.upLongitude, keptLat, keptLng, fDistanceResults);// IN METERS
-            favouriteDistance.setText(fDistanceResults[0] / 1000 + "km");
+            Location.distanceBetween(MainActivity.upLatitude, MainActivity.upLongitude, keptLat, keptLng, fDistanceResults);// DEFAULT  IN KILOMETERS
+
+
+            //FETCH SETTINGS RESULTS FROM SharedPreferences
+            //set Shared Preferences (there you save settings values )
+            SharedPreferences sharedFPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            //get value from SharedPrefs
+           fPreference  = sharedFPreferences.getString("list_preference_units", "kilometre");//list_preference_units is key(id) of preference item in preferences.xml
+
+            //check settings results
+            if(fPreference.equals("kilometre") ) {
+                roundedFDis =  (double)Math.round( (fDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+                favouriteDistance.setText(roundedFDis + " km ");//km
+            }else{
+                roundedFDis =  (double)Math.round( (((fDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+               favouriteDistance.setText(roundedFDis + "  miles");//miles
+            }
+
 
             ImageView fImage = (ImageView) favouriteView.findViewById(R.id.favouriteImage);//IMAGE
 
@@ -152,3 +172,21 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         }
     }
 }
+/*
+/*
+    //FETCH SETTINGS RESULTS FROM SharedPreferences
+            //set Shared Preferences (there you save settings values )
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            //get value from SharedPrefs
+            preference = sharedPreferences.getString("list_preference_units", "kilometre");//list_preference_units is key(id) of preference item in preferences.xml
+
+            //GOOD IDEA IF YOU TRY TO ROUND UP NUMBERS!!!!!!!!!!!!!!!
+            if(preference.equals("kilometre") ) {
+                roundedDis =  (double)Math.round( (txtDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+                  resultTxtDistance.setText(roundedDis + " km ");//km
+            }else{
+                roundedDis =  (double)Math.round( (((txtDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
+                   resultTxtDistance.setText(roundedDis + "  miles");//miles
+            }
+
+ */
