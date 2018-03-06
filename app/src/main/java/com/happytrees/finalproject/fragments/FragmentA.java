@@ -109,11 +109,15 @@ public class FragmentA extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //code checks if network available and user  connected to it (then isConnected is true)
                 ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
                 if(isConnected ) {
+
+
+
 
                     //check if edit text empty
                     if (edtSearch.length() != 0) {
@@ -121,7 +125,7 @@ public class FragmentA extends Fragment {
 
                         //NOTHING SELECTED
                         if (!txtChecked && !nearChecked) {
-                            Toast.makeText(getActivity(), "please choose an option", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
                             //TXT SELECTED
                         } else if (txtChecked && !nearChecked) {
                             Log.e("TAG", fromEdtTxt + "A");
@@ -210,6 +214,7 @@ public class FragmentA extends Fragment {
 
 
                 }else{
+                    //DISPLAY LAST SEARCH RESULT DOESN'T MATTER IF NEARBY/TXT ONE
                     Toast.makeText(getActivity(), "enable network provider", Toast.LENGTH_SHORT).show();
                 }
             }
