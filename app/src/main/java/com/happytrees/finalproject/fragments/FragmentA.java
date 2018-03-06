@@ -107,11 +107,11 @@ public class FragmentA extends Fragment {
             public void onClick(View v) {
 
                 //check if edit text empty
-                if(edtSearch.length()!=0) {
-                    fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
-                }else{
-                    Toast.makeText(getActivity(),"please write something",Toast.LENGTH_SHORT).show();
-                }
+               if(edtSearch.length()!=0) {
+                   fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
+             //   }else{
+              //      Toast.makeText(getActivity(),"please write something",Toast.LENGTH_SHORT).show();
+               // }
 
                 //NOTHING SELECTED
                 if(!txtChecked&&!nearChecked) {
@@ -197,6 +197,10 @@ public class FragmentA extends Fragment {
                         }
                     });
                 }
+
+            }else{
+                      Toast.makeText(getActivity(),"please write something",Toast.LENGTH_SHORT).show();
+                 }
             }
         });
 

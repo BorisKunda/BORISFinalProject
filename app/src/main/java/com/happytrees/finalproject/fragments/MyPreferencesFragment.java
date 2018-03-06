@@ -58,9 +58,3 @@ public class MyPreferencesFragment extends PreferenceFragment {
         });
     }
 }
-/*
-// DELETE ALL DB
-       List<Location> allContacts = Location.listAll(Location.class);
-        Location.deleteAll(Location.class);
-
- */
