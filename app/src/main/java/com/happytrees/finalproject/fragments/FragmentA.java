@@ -2,7 +2,10 @@ package com.happytrees.finalproject.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
@@ -106,12 +109,14 @@ public class FragmentA extends Fragment {
             @Override
             public void onClick(View v) {
 
+                ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+
                 //check if edit text empty
                if(edtSearch.length()!=0) {
                    fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
-             //   }else{
-              //      Toast.makeText(getActivity(),"please write something",Toast.LENGTH_SHORT).show();
-               // }
 
                 //NOTHING SELECTED
                 if(!txtChecked&&!nearChecked) {
