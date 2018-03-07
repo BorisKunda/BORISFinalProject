@@ -13,21 +13,21 @@ module class's objects received using constructor in both times.
 This way we will store objects made by TxtResult class through ResultDB class in Sugar Orm database by converting json objects to java objects and only then store them*/
 //NOTE: there no need in recreating module hierarchy ,the only requirement is that variables of both classes (ResultDB and TxtResult/NearbyResult will have same names and values)
 
-
+//this class is table where favourites eventually will be stored
 public class ResultDB extends SugarRecord {
 
     public String name;
-    public String formatted_address;//I converted vicinity into formatted_address later
+    public String formatted_address;//I converted vicinity into formatted_address inside NearbyAdapter
     public double lat;
     public double lng;
     public String photo_reference;
 
 
-    //required empty constructor
+    //required  by Sugar Orm empty constructor
     public ResultDB() {
     }
 
-    //constructor
+    //constructor -> WE USING THIS CONSTRUCTOR IN TxtAdapter,NearbyAdapter in LongClickListener when we create ResultDB type object in order to save to favourites(in objects parenthesis we write values of TxtResult variables)
     public ResultDB(String name, String formatted_address, double lat, double lng, String photo_reference) {
         this.name = name;
         this.formatted_address = formatted_address;
