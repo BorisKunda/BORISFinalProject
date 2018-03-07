@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.ActivityCompat;
 import android.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -93,8 +94,6 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
     public  PowerConnectedBCReceiver myPowerConnectedBCReceiver;
     public IntentFilter intentPowerOn;
     public IntentFilter intentPowerOff;
-
-
 
 
     @Override
