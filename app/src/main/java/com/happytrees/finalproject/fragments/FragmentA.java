@@ -58,6 +58,7 @@ public class FragmentA extends Fragment {
     String fromEdtTxt;
     boolean txtChecked,nearChecked =false;//both false by default
     RecyclerView fragArecycler;
+    public boolean isOffline;
 
 
     public FragmentA() {
@@ -115,11 +116,21 @@ public class FragmentA extends Fragment {
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
+                //if network provider disabled ask from user re-enable it
+                if(!isConnected) {
+                    Toast.makeText(getActivity(), "enable network provider", Toast.LENGTH_SHORT).show();
+                }
+
+                //check if location provider enabled if not ask user re-enable it
                 LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+               if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                   Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
+                }
 
-                if(isConnected ) {
-
-                    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                //if gps disabled or network disabled or both -> ACTIVATE CACHING
+                if(!isConnected||!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    isOffline = true;
+                }
 
 
                         //check if edit text empty
@@ -131,7 +142,7 @@ public class FragmentA extends Fragment {
                                 Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
                                 //TXT SELECTED
                             } else if (txtChecked && !nearChecked) {
-                                Log.e("TAG", fromEdtTxt + "A");
+                                Log.i("SEARCH", "TxtSearch");
                                 //text search call
                                 Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
                                 progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
@@ -166,7 +177,7 @@ public class FragmentA extends Fragment {
 
                                 //NEARBY SELECTED
                             } else if (!txtChecked && nearChecked) {
-
+                                Log.i("SEARCH", "NearbySearch");
                                 //FETCHED LATITUDE AND LONGITUDE FROM MAIN ACTIVITY
                                 double fUpLatitude = MainActivity.upLatitude;//fetch current position's latitude from Main Activity
                                 double fUpLongitude = MainActivity.upLongitude; //fetch current position's Longitude from Main Activity
@@ -216,15 +227,10 @@ public class FragmentA extends Fragment {
                         }
 
 
-                    }else{
-                        Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
-                    }
-         //////////////////////////////////////////////
 
-                }else{
-                    //DISPLAY LAST SEARCH RESULT DOESN'T MATTER IF NEARBY/TXT ONE
-                    Toast.makeText(getActivity(), "enable network provider", Toast.LENGTH_SHORT).show();
-                }
+
+
+
             }
         });
 
@@ -274,18 +280,6 @@ public class FragmentA extends Fragment {
 
 }
 /*
-
-        //set Shared Preferences (there you save settings values )
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        //get value from SharedPrefs
-        String showInList = sharedPreferences.getString("list_preference", "list");//list_preference is key(id) of preference item in preferences.xml
-
-        if(showInList.equals("List")) {//means user chose List radio button option in ListDisplayPrefs
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));//makes recycler view list
-        }
-        else//means user chose "Grid"
-        {
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        }
+    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+                   snackbar.show();
  */
