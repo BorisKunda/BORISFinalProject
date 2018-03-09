@@ -54,4 +54,5 @@ dependencies {
     compile 'com.github.satyan:sugar:1.5'
     //multidex support prior to Android 5.0
     compile 'com.android.support:multidex:1.0.1'
+
 }

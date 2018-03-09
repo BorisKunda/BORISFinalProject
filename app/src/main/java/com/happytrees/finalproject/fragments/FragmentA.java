@@ -2,6 +2,7 @@ package com.happytrees.finalproject.fragments;
 
 
 import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
@@ -30,14 +31,21 @@ import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
-import com.happytrees.finalproject.rest.APIClient;
 import com.happytrees.finalproject.rest.Endpoint;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 //YOU DON'T HAVE SERIALIZE EVERYTHING ONLY THE OBJECTS YOU WANT TO FETCH IN PARSING.AND YOU DON'T HAVE TO WRITE @SerializedName annotation
@@ -58,7 +66,9 @@ public class FragmentA extends Fragment {
     String fromEdtTxt;
     boolean txtChecked,nearChecked =false;//both false by default
     RecyclerView fragArecycler;
-    public boolean isOffline;
+    public boolean isOffline = false ;//default value
+    public int cacheSize = 10 * 1024 * 1024; // 10 MiB  -> maximum cache size .when it becomes full it refreshes (deletes all stored cache files).MiB is unit of measurement which quite similar to megabytes
+
 
 
     public FragmentA() {
@@ -77,9 +87,8 @@ public class FragmentA extends Fragment {
        fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
 
-        //connect the retrofit class with the interface class
-        //generate new instance of the interface and call it service
-        final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
+
+
 
         //GO BUTTON
         Button goBtn = (Button)v.findViewById(R.id.goBtn);
@@ -107,6 +116,64 @@ public class FragmentA extends Fragment {
 
 
 
+        //code checks if network available and user  connected to it (then isConnected is true)
+        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        //check gps
+        LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        // if gps ,network or both disabled isOffline declared true
+        if(!isConnected||!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            isOffline = true;
+        }
+
+        //DEALING WITH CACHING -> caching will load previously searched entries faster.and when offline searching these specific entries will give you previously called results
+
+        //getCacheDir()  cant be used  directly without root ->grants cache files  path to the application specific cache directory on the filesystem.(its size defined in this example  by cacheSize variable)
+        //So we used alternative :
+        File httpCacheDirectory = new File(getActivity().getCacheDir(), "responses");
+
+        //create cache object
+        Cache cache = new Cache(httpCacheDirectory,10 * 1024 * 1024);
+
+        //create okhttp object
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(cache).addInterceptor(new Interceptor() {
+            @Override //Interceptor will intercept Retrofit's response(call)
+            public okhttp3.Response intercept( Chain chain)  {//in case there will be exception it dealt further in code
+                Request request = chain.request();
+                if(isOffline) {
+                    int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale \
+                    request = request
+                            .newBuilder()
+                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                            .build();
+                }
+                try {
+                    return chain.proceed(request);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        })
+                .build();
+
+
+
+
+        //instead of using  code inside APIClient  we use one belowe
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        //connect the retrofit class with the interface class
+        //generate new instance of the interface and call it service
+        Retrofit retrofit = builder.build();
+        final Endpoint apiService = retrofit.create(Endpoint.class);//instead previously used : final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
+
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,12 +194,6 @@ public class FragmentA extends Fragment {
                    Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
                 }
 
-                //if gps disabled or network disabled or both -> ACTIVATE CACHING
-                if(!isConnected||!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    isOffline = true;
-                }
-
-
                         //check if edit text empty
                         if (edtSearch.length() != 0) {
                             fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
@@ -142,7 +203,6 @@ public class FragmentA extends Fragment {
                                 Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
                                 //TXT SELECTED
                             } else if (txtChecked && !nearChecked) {
-                                Log.i("SEARCH", "TxtSearch");
                                 //text search call
                                 Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
                                 progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
@@ -151,22 +211,31 @@ public class FragmentA extends Fragment {
                                     public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
                                         final ArrayList<TxtResult> myDataSource = new ArrayList<>();
                                         myDataSource.clear();//clean old list if there was call from before
-                                        TxtResponse res = response.body();
-                                        myDataSource.addAll(res.results);
+                                        if (response.body() == null) {
+                                            Log.i("OFFLINE ", "No Results");
+                                            progressDoalog.dismiss();
+                                        } else {
+                                            TxtResponse res = response.body();
 
-                                        if (myDataSource.isEmpty()) {
-                                            Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                            Log.i("Connection", "OFFLINE can't display results");
+
+                                            myDataSource.addAll(res.results);
+
+                                            if (myDataSource.isEmpty()) {
+                                                Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                            }
+
+                                            fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                            //setting txt adapter
+                                            RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
+                                            fragArecycler.setAdapter(myTxtAdapter);
+                                            myTxtAdapter.notifyDataSetChanged();//refresh
+                                            progressDoalog.dismiss();//dismiss progress bar after call was completed
+                                            Log.e("TxtResults", " very good: " + response.body());
+
                                         }
-
-                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
-                                        //setting txt adapter
-                                        RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
-                                        fragArecycler.setAdapter(myTxtAdapter);
-                                        myTxtAdapter.notifyDataSetChanged();//refresh
-                                        progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                        Log.e("TxtResults", " very good: " + response.body());
-
                                     }
+
 
                                     @Override
                                     public void onFailure(Call<TxtResponse> call, Throwable t) {
@@ -174,6 +243,8 @@ public class FragmentA extends Fragment {
                                         Log.e("TxtResults", " bad: " + t);
                                     }
                                 });
+
+
 
                                 //NEARBY SELECTED
                             } else if (!txtChecked && nearChecked) {
@@ -220,6 +291,7 @@ public class FragmentA extends Fragment {
 
                                     }
                                 });
+
                             }
 
                         } else {
