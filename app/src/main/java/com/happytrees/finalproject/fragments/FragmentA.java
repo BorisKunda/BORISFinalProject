@@ -31,6 +31,7 @@ import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
 import com.happytrees.finalproject.model_txt_search.TxtResult;
+import com.happytrees.finalproject.rest.APIClient;
 import com.happytrees.finalproject.rest.Endpoint;
 
 import java.io.File;
@@ -67,7 +68,7 @@ public class FragmentA extends Fragment {
     boolean txtChecked,nearChecked =false;//both false by default
     RecyclerView fragArecycler;
     public boolean isOffline = false ;//default value
-    public int cacheSize = 10 * 1024 * 1024; // 10 MiB  -> maximum cache size .when it becomes full it refreshes (deletes all stored cache files).MiB is unit of measurement which quite similar to megabytes
+
 
 
 
@@ -116,63 +117,9 @@ public class FragmentA extends Fragment {
 
 
 
-        //code checks if network available and user  connected to it (then isConnected is true)
-        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        //check gps
-        LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
 
-        // if gps ,network or both disabled isOffline declared true
-        if(!isConnected||!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            isOffline = true;
-        }
-
-        //DEALING WITH CACHING -> caching will load previously searched entries faster.and when offline searching these specific entries will give you previously called results
-
-        //getCacheDir()  cant be used  directly without root ->grants cache files  path to the application specific cache directory on the filesystem.(its size defined in this example  by cacheSize variable)
-        //So we used alternative :
-        File httpCacheDirectory = new File(getActivity().getCacheDir(), "responses");
-
-        //create cache object
-        Cache cache = new Cache(httpCacheDirectory,10 * 1024 * 1024);
-
-        //create okhttp object
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(cache).addInterceptor(new Interceptor() {
-            @Override //Interceptor will intercept Retrofit's response(call)
-            public okhttp3.Response intercept( Chain chain)  {//in case there will be exception it dealt further in code
-                Request request = chain.request();
-                if(isOffline) {
-                    int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale \
-                    request = request
-                            .newBuilder()
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                            .build();
-                }
-                try {
-                    return chain.proceed(request);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        })
-                .build();
-
-
-
-
-        //instead of using  code inside APIClient  we use one belowe
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://maps.googleapis.com")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        //connect the retrofit class with the interface class
-        //generate new instance of the interface and call it service
-        Retrofit retrofit = builder.build();
-        final Endpoint apiService = retrofit.create(Endpoint.class);//instead previously used : final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
 
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +141,11 @@ public class FragmentA extends Fragment {
                    Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
                 }
 
+
+                if(!isConnected||!!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ){
+                    isOffline = true;
+                }
+
                         //check if edit text empty
                         if (edtSearch.length() != 0) {
                             fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
@@ -211,10 +163,6 @@ public class FragmentA extends Fragment {
                                     public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
                                         final ArrayList<TxtResult> myDataSource = new ArrayList<>();
                                         myDataSource.clear();//clean old list if there was call from before
-                                        if (response.body() == null) {
-                                            Log.i("OFFLINE ", "No Results");
-                                            progressDoalog.dismiss();
-                                        } else {
                                             TxtResponse res = response.body();
 
                                             Log.i("Connection", "OFFLINE can't display results");
@@ -234,7 +182,7 @@ public class FragmentA extends Fragment {
                                             Log.e("TxtResults", " very good: " + response.body());
 
                                         }
-                                    }
+
 
 
                                     @Override
