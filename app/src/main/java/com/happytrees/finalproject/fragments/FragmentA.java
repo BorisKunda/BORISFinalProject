@@ -67,11 +67,9 @@ public class FragmentA extends Fragment {
     String key = "AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";//no need in decode
     EditText edtSearch;
     String fromEdtTxt;
-    boolean txtChecked,nearChecked =false;//both false by default
+    boolean txtChecked, nearChecked = false;//both false by default
     RecyclerView fragArecycler;
-    public boolean isOffline = false ;//default value
-
-
+    public boolean isOffline = false;//default value
 
 
     public FragmentA() {
@@ -87,27 +85,23 @@ public class FragmentA extends Fragment {
 
 
         //setting RecyclerView
-       fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
-
-
-
+        fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
 
         //GO BUTTON
-        Button goBtn = (Button)v.findViewById(R.id.goBtn);
+        Button goBtn = (Button) v.findViewById(R.id.goBtn);
 
         //EditText
         edtSearch = (EditText) v.findViewById(R.id.editTextSearch);
         //GET STRING VALUE FROM EDIT TEXT
 
-           //PROGRESS BAR
+        //PROGRESS BAR
         // Set up progress before call
-       final ProgressDialog progressDoalog;
+        final ProgressDialog progressDoalog;
         progressDoalog = new ProgressDialog(getActivity());
         progressDoalog.setMessage("Its loading....");
         progressDoalog.setTitle("ProgressDialog bar ");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
 
 
         //FETCH SETTINGS RESULTS FROM SharedPreferences
@@ -115,9 +109,6 @@ public class FragmentA extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         //get value from SharedPrefs
         radius = sharedPreferences.getString("list_preference_radius", "500");//list_preference_radius is key(id) of preference item in preferences.xml
-
-
-
 
 
         final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
@@ -128,156 +119,167 @@ public class FragmentA extends Fragment {
             public void onClick(View v) {
 
                 //code checks if network available and user  connected to it (then isConnected is true)
-                ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
                 //if network provider disabled ask from user re-enable it
-                if(!isConnected) {
+                if (!isConnected) {
                     Toast.makeText(getActivity(), "enable network provider", Toast.LENGTH_SHORT).show();
                 }
 
                 //check if location provider enabled if not ask user re-enable it
                 LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-               if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                   Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Toast.makeText(getActivity(), "please enable gps", Toast.LENGTH_SHORT).show();
                 }
 
 
-                if(!isConnected||!!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ){
+                if (!isConnected || !!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     isOffline = true;
                 }
 
-                        //check if edit text empty
-                        if (edtSearch.length() != 0) {
-                            fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
+                //check if edit text empty
+                if (edtSearch.length() != 0) {
+                    fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
 
-                            //NOTHING SELECTED
-                            if (!txtChecked && !nearChecked) {
-                                Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
-                                //TXT SELECTED
-                            } else if (txtChecked && !nearChecked) {
-                                //text search call
-                                Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
-                                progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
-                                call.enqueue(new Callback<TxtResponse>() {
-                                    @Override
-                                    public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
-                                        final ArrayList<TxtResult> myDataSource = new ArrayList<>();
-                                        myDataSource.clear();//clean old list if there was call from before
-                                            TxtResponse res = response.body();
+                    //NOTHING SELECTED
+                    if (!txtChecked && !nearChecked) {
+                        Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
+                        //TXT SELECTED
+                    } else if (txtChecked && !nearChecked) {
+                        //text search call
+                        Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
+                        progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
+                        call.enqueue(new Callback<TxtResponse>() {
+                            @Override
+                            public void onResponse(Call<TxtResponse> call, Response<TxtResponse> response) {
+                                final ArrayList<TxtResult> myDataSource = new ArrayList<>();
+                                myDataSource.clear();//clean old list if there was call from before
+                                TxtResponse res = response.body();
 
-                                            Log.i("Connection", "OFFLINE can't display results");
+                                Log.i("Connection", "OFFLINE can't display results");
 
-                                            myDataSource.addAll(res.results);
+                                myDataSource.addAll(res.results);
 
-                                            if (myDataSource.isEmpty()) {
-                                                Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
-                                            }
+                                if (myDataSource.isEmpty()) {
+                                    Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                }
 
-                                            //SEARCH HISTORY
-                                        //delete old searches
-                                        List<LastSearch> lastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
-                                        LastSearch.deleteAll(LastSearch.class);
+                                //SEARCH HISTORY
 
-                                            //loop through array  of results received from retrofit and insert them all  into database as most recent result
-                                            for (int position =0; position <myDataSource.size();position++) {
-                                                LastSearch lastSearch = new LastSearch(myDataSource.get(position).name,myDataSource.get(position).formatted_address,myDataSource.get(position).geometry.location.lat,myDataSource.get(position).geometry.location.lng);
-                                                lastSearch.save();
-                                            }
-
-                                        //loop through list of  retrofit response's results and add each one to database
-//List<LastSearch> lastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
-//  LastSearch.deleteAll(LastSearch.class);
-//last search saved for history
-// LastSearch lastSearch = new LastSearch(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng);
-// lastSearch.save();
+                                if(!myDataSource.isEmpty()) {//prevent an attempt of storing empty  array into LastSearch DB
 
 
-
-                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
-                                            //setting txt adapter
-                                            RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
-                                            fragArecycler.setAdapter(myTxtAdapter);
-                                            myTxtAdapter.notifyDataSetChanged();//refresh
-                                            progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                            Log.e("TxtResults", " very good: " + response.body());
-
-                                        }
+                                    //delete old searches
+                                    List<LastSearch> lastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
+                                    LastSearch.deleteAll(LastSearch.class);
 
 
-
-                                    @Override
-                                    public void onFailure(Call<TxtResponse> call, Throwable t) {
-                                        progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                        Log.e("TxtResults", " bad: " + t);
-                                    }
-                                });
-
-
-
-                                //NEARBY SELECTED
-                            } else if (!txtChecked && nearChecked) {
-                                Log.i("SEARCH", "NearbySearch");
-                                //FETCHED LATITUDE AND LONGITUDE FROM MAIN ACTIVITY
-                                double fUpLatitude = MainActivity.upLatitude;//fetch current position's latitude from Main Activity
-                                double fUpLongitude = MainActivity.upLongitude; //fetch current position's Longitude from Main Activity
-                                String convertedFUpLatitude = String.valueOf(fUpLatitude);//convert double to String
-                                String convertedFUpLongitude = String.valueOf(fUpLongitude);//convert double to String
-                                String comma = ",";
-                                newNLocation = convertedFUpLatitude + comma + convertedFUpLongitude;
-                                //nearby search call
-                                Call<NearbyResponse> nCall = apiService.getNearbyResults(newNLocation, radius, fromEdtTxt, key);
-                                progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
-                                nCall.enqueue(new Callback<NearbyResponse>() {
-                                    @Override
-                                    public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
-                                        //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
-                                        final ArrayList<NearbyResult> nDataSource = new ArrayList<>();
-                                        nDataSource.clear();//clean old list if there was call from before
-                                        NearbyResponse nRes = response.body();
-                                        nDataSource.addAll(nRes.results);
-
-                                        if (nDataSource.isEmpty()) {
-                                            Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
-                                        }
-
-                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
-                                        //setting txt adapter
-                                        RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource, getActivity());
-                                        fragArecycler.setAdapter(myNearAdapter);
-                                        myNearAdapter.notifyDataSetChanged();//refresh
-
-                                        progressDoalog.dismiss();//dismiss progress bar after call was completed
-
-                                        Log.e("TxtResults", " very good: " + response.body());
-
+                                    //loop through array  of results received from retrofit and insert them all into database as most recent result
+                                    for (int position = 0; position < myDataSource.size(); position++) {
+                                        LastSearch lastSearch = new LastSearch(myDataSource.get(position).name, myDataSource.get(position).formatted_address, myDataSource.get(position).geometry.location.lat, myDataSource.get(position).geometry.location.lng);
+                                        lastSearch.save();
                                     }
 
-                                    @Override
-                                    public void onFailure(Call<NearbyResponse> call, Throwable t) {
-                                        progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                        Log.e("NearResults", " bad: " + t);
+                                }
 
-                                    }
-                                });
+
+                                fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                //setting txt adapter
+                                RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
+                                fragArecycler.setAdapter(myTxtAdapter);
+                                myTxtAdapter.notifyDataSetChanged();//refresh
+                                progressDoalog.dismiss();//dismiss progress bar after call was completed
+                                Log.e("TxtResults", " very good: " + response.body());
 
                             }
 
-                        } else {
-                            Toast.makeText(getActivity(), "please write something", Toast.LENGTH_SHORT).show();
-                        }
+
+                            @Override
+                            public void onFailure(Call<TxtResponse> call, Throwable t) {
+                                progressDoalog.dismiss();//dismiss progress bar after call was completed
+                                Log.e("TxtResults", " bad: " + t);
+                            }
+                        });
 
 
+                        //NEARBY SELECTED
+                    } else if (!txtChecked && nearChecked) {
+                        Log.i("SEARCH", "NearbySearch");
+                        //FETCHED LATITUDE AND LONGITUDE FROM MAIN ACTIVITY
+                        double fUpLatitude = MainActivity.upLatitude;//fetch current position's latitude from Main Activity
+                        double fUpLongitude = MainActivity.upLongitude; //fetch current position's Longitude from Main Activity
+                        String convertedFUpLatitude = String.valueOf(fUpLatitude);//convert double to String
+                        String convertedFUpLongitude = String.valueOf(fUpLongitude);//convert double to String
+                        String comma = ",";
+                        newNLocation = convertedFUpLatitude + comma + convertedFUpLongitude;
+                        //nearby search call
+                        Call<NearbyResponse> nCall = apiService.getNearbyResults(newNLocation, radius, fromEdtTxt, key);
+                        progressDoalog.show();//SHOW PROGRESS BAR BEFORE CALL
+                        nCall.enqueue(new Callback<NearbyResponse>() {
+                            @Override
+                            public void onResponse(Call<NearbyResponse> call, Response<NearbyResponse> response) {
+                                //  Toast.makeText(getContext(),"nearby search selected",Toast.LENGTH_SHORT).show();
+                                final ArrayList<NearbyResult> nDataSource = new ArrayList<>();
+                                nDataSource.clear();//clean old list if there was call from before
+                                NearbyResponse nRes = response.body();
+                                nDataSource.addAll(nRes.results);
+
+                                if (nDataSource.isEmpty()) {
+                                    Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
+                                }
+
+                                //SEARCH HISTORY
+
+                                if(!nDataSource.isEmpty()) {//prevent an attempt of storing empty  array into LastSearch DB
 
 
+                                    //delete old searches
+                                    List<LastSearch> nlastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
+                                    LastSearch.deleteAll(LastSearch.class);
+
+
+                                    //loop through array  of results received from retrofit and insert them all into database as most recent result
+                                    for (int position = 0; position < nDataSource.size(); position++) {
+                                        LastSearch nlastSearch = new LastSearch(nDataSource.get(position).name, nDataSource.get(position).vicinity, nDataSource.get(position).geometry.location.lat, nDataSource.get(position).geometry.location.lng);
+                                        nlastSearch.save();
+                                    }
+
+                                }
+
+                                fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                //setting txt adapter
+                                RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource, getActivity());
+                                fragArecycler.setAdapter(myNearAdapter);
+                                myNearAdapter.notifyDataSetChanged();//refresh
+
+                                progressDoalog.dismiss();//dismiss progress bar after call was completed
+
+                                Log.e("TxtResults", " very good: " + response.body());
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<NearbyResponse> call, Throwable t) {
+                                progressDoalog.dismiss();//dismiss progress bar after call was completed
+                                Log.e("NearResults", " bad: " + t);
+
+                            }
+                        });
+
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "please write something", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
         });
 
         //CLEAN BUTTON
-        Button cleanBtn = (Button)v.findViewById(R.id.cleanBtn);
+        Button cleanBtn = (Button) v.findViewById(R.id.cleanBtn);
         cleanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,7 +301,7 @@ public class FragmentA extends Fragment {
                 switch (checkedId) {
 
                     case R.id.radioButtonTxtSearch:
-                        txtChecked =true;
+                        txtChecked = true;
                         nearChecked = false;
                         break;
 
