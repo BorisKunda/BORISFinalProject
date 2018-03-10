@@ -12,4 +12,10 @@ public class TxtResult {
     public String name;
     public List<TxtPhoto> photos ;
     public String place_id;
+
+    @Override
+    public String toString() {
+        return  name ;
+    }
 }
+

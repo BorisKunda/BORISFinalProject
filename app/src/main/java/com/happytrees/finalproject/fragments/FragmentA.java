@@ -27,6 +27,7 @@ import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.adapter.NearbyAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
+import com.happytrees.finalproject.database.LastSearch;
 import com.happytrees.finalproject.model_nearby_search.NearbyResponse;
 import com.happytrees.finalproject.model_nearby_search.NearbyResult;
 import com.happytrees.finalproject.model_txt_search.TxtResponse;
@@ -37,6 +38,7 @@ import com.happytrees.finalproject.rest.Endpoint;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -173,7 +175,27 @@ public class FragmentA extends Fragment {
                                                 Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                             }
 
-                                            fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+                                            //SEARCH HISTORY
+                                        //delete old searches
+                                        List<LastSearch> lastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
+                                        LastSearch.deleteAll(LastSearch.class);
+
+                                            //loop through array  of results received from retrofit and insert them all  into database as most recent result
+                                            for (int position =0; position <myDataSource.size();position++) {
+                                                LastSearch lastSearch = new LastSearch(myDataSource.get(position).name,myDataSource.get(position).formatted_address,myDataSource.get(position).geometry.location.lat,myDataSource.get(position).geometry.location.lng);
+                                                lastSearch.save();
+                                            }
+
+                                        //loop through list of  retrofit response's results and add each one to database
+//List<LastSearch> lastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
+//  LastSearch.deleteAll(LastSearch.class);
+//last search saved for history
+// LastSearch lastSearch = new LastSearch(txtResultCurrent.name,txtResultCurrent.formatted_address,txtResultCurrent.geometry.location.lat,txtResultCurrent.geometry.location.lng);
+// lastSearch.save();
+
+
+
+                                        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                             //setting txt adapter
                                             RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                                             fragArecycler.setAdapter(myTxtAdapter);

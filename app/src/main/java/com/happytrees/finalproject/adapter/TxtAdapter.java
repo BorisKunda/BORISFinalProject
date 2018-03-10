@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
+import com.happytrees.finalproject.database.LastSearch;
 import com.happytrees.finalproject.database.ResultDB;
 import com.happytrees.finalproject.fragments.FragmentA;
 import com.happytrees.finalproject.fragments.FragmentChanger;
@@ -130,6 +131,8 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                 roundedDis =  (double)Math.round( (((txtDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
                    resultTxtDistance.setText(roundedDis + "  miles");//miles
             }
+
+
 
 
                //fetch place id

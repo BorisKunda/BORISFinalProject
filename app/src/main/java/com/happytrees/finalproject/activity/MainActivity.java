@@ -66,6 +66,7 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 
 
 //NOTES:
+//WHEN YOU CREATE SECOND,THIRD,ETC TABLE IN SUGAR ORM DATABASE YOU NEED TO CHANGE YOUR DB VERSION ACCORDINGLY(example : second table :  version 1 => 2 ) if it still crashes change also db name
 //BROADCAST RECEIVER SHOULD BE UNREGISTERED onPause,if not unregistered it will continue receive broadcasts even when app is no longer active
 //BROADCAST RECEIVER SHOULD BE REGISTERED onResume if was previously unregistered onPause,otherwise it will cease to function after app was brought to background once
 //GOOGLE API HAS LOTS OF DIFFERENT API'S SUCH AS : GOOGLE PLACES API,GOOGLE MAPS API ETC. YOU MUST ENABLE ALL OF THEM IN DEVELOPER CONSOLE FOR YOUR APP PROPER PERFORMANCE
