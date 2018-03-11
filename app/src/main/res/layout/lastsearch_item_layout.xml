@@ -59,12 +59,13 @@
                 android:textSize="20dp" />
 
             <ImageView
+                android:background="@drawable/offline"
                 android:id="@+id/historyImageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color" />
+              />
 
 
         </RelativeLayout>
