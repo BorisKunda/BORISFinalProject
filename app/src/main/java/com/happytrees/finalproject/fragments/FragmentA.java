@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.happytrees.finalproject.R;
 import com.happytrees.finalproject.activity.MainActivity;
 import com.happytrees.finalproject.adapter.NearbyAdapter;
+import com.happytrees.finalproject.adapter.SearchHistoryAdapter;
 import com.happytrees.finalproject.adapter.TxtAdapter;
 
 import com.happytrees.finalproject.database.LastSearch;
@@ -87,6 +88,8 @@ public class FragmentA extends Fragment {
         //setting RecyclerView
         fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
+        fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+
 
         //GO BUTTON
         Button goBtn = (Button) v.findViewById(R.id.goBtn);
@@ -132,10 +135,19 @@ public class FragmentA extends Fragment {
                 if (!isConnected || !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     isOffline = true;
                     Toast.makeText(getActivity(),"OFFLINE - enable gps and network providers ",Toast.LENGTH_SHORT).show();
+
+                    //displaying last search
+                    List<LastSearch> nlastSearches = LastSearch.listAll(LastSearch.class);
+
+                    SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(nlastSearches,getActivity());
+
+                    fragArecycler.setAdapter(searchHistoryAdapter);
+
+
+
                 }else {
 
 
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //check if edit text empty
                     if (edtSearch.length() != 0) {
                         fromEdtTxt = edtSearch.getText().toString();//keep txt written in EditText inside fromEdtTxt variable
@@ -181,7 +193,6 @@ public class FragmentA extends Fragment {
                                     }
 
 
-                                    fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
                                     //setting txt adapter
                                     RecyclerView.Adapter myTxtAdapter = new TxtAdapter(myDataSource, getActivity());
                                     fragArecycler.setAdapter(myTxtAdapter);
@@ -232,7 +243,7 @@ public class FragmentA extends Fragment {
 
 
                                         //delete old searches
-                                        List<LastSearch> nlastSearches = LastSearch.listAll(LastSearch.class);//select all favourites
+                                        List<LastSearch> nlastSearches = LastSearch.listAll(LastSearch.class);
                                         LastSearch.deleteAll(LastSearch.class);
 
 
@@ -244,7 +255,7 @@ public class FragmentA extends Fragment {
 
                                     }
 
-                                    fragArecycler.setLayoutManager(new LinearLayoutManager(getActivity()));//LinearLayoutManager, GridLayoutManager ,StaggeredGridLayoutManagerFor defining how single row of recycler view will look .  LinearLayoutManager shows items in horizontal or vertical scrolling list. Don't confuse with type of layout you use in xml
+
                                     //setting txt adapter
                                     RecyclerView.Adapter myNearAdapter = new NearbyAdapter(nDataSource, getActivity());
                                     fragArecycler.setAdapter(myNearAdapter);
@@ -272,7 +283,7 @@ public class FragmentA extends Fragment {
 
 
                 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             }
         });
 

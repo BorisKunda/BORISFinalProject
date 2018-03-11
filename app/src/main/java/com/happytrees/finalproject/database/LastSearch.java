@@ -8,8 +8,8 @@ import com.orm.SugarRecord;
 
 public class LastSearch extends SugarRecord {
 
-    String name;
-    String formatted_address;
+    public  String name;
+    public  String formatted_address;
     public double lat;
     public double lng;
 
