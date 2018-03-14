@@ -6,7 +6,7 @@ android {
         // Enabling multidex support
         multiDexEnabled true
         applicationId "com.happytrees.finalproject"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"

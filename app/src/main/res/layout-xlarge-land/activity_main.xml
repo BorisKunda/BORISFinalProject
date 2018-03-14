@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="2"
     tools:context="com.happytrees.finalproject.activity.MainActivity">
 
     <LinearLayout
@@ -17,11 +18,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/ExtraContainer"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2">
+        android:layout_weight="1"
+        android:background="@drawable/mappaint"
+        android:orientation="vertical">
 
     </LinearLayout>
 

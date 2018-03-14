@@ -1,6 +1,7 @@
 package com.happytrees.finalproject.fragments;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 
 import android.content.Context;
@@ -17,9 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.happytrees.finalproject.R;
@@ -84,7 +87,6 @@ public class FragmentA extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_a, container, false);
 
-
         //setting RecyclerView
         fragArecycler = (RecyclerView) v.findViewById(R.id.recyclerSearch);
 
@@ -96,7 +98,23 @@ public class FragmentA extends Fragment {
 
         //EditText
         edtSearch = (EditText) v.findViewById(R.id.editTextSearch);
+
+        //listens after edit text if focus on it,if no closes keyboard
+        edtSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    Log.i("EDITTEXT","NO FOCUS");
+                    InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }else if(hasFocus) {
+                    Log.i("EDITTEXT","FOCUS");
+                }
+            }
+        });
         //GET STRING VALUE FROM EDIT TEXT
+
+
 
         //PROGRESS BAR
         // Set up progress before call
@@ -114,12 +132,19 @@ public class FragmentA extends Fragment {
         radius = sharedPreferences.getString("list_preference_radius", "500");//list_preference_radius is key(id) of preference item in preferences.xml
 
 
+        //if button in focus closes keyboard
         final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
+
+
 
 
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //closes keyboard when Go button clicked
+                InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 //code checks if network available and user  connected to it (then isConnected is true)
                 ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -325,11 +350,14 @@ public class FragmentA extends Fragment {
                 }
 
 
+
             }
 
         });
         return v;
     }
+
+
 
 }
 /*

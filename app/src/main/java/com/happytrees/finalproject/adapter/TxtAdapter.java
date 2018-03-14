@@ -97,6 +97,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             TextView resultName = (TextView) myView.findViewById(R.id.resultName);//NAME
             resultName.setText(txtResultCurrent.name);
 
+
             TextView resultAddress = (TextView) myView.findViewById(R.id.resultAddress);//ADDRESS
             resultAddress.setText(txtResultCurrent.formatted_address);
 

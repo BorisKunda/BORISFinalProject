@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
 
         //CHANGE ACTION BAR COLOR
         ActionBar bar =  getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#bf360c")));
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2196F3")));
 
 
         //create an instance of the Fused Location Provider Client
