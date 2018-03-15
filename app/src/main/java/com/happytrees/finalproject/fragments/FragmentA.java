@@ -223,7 +223,7 @@ public class FragmentA extends Fragment {
                                     fragArecycler.setAdapter(myTxtAdapter);
                                     myTxtAdapter.notifyDataSetChanged();//refresh
                                     progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                    Log.e("TxtResults", " very good: " + response.body());
+                                    Log.i("TxtResults", " very good: " + response.body());
 
                                 }
 
@@ -231,7 +231,7 @@ public class FragmentA extends Fragment {
                                 @Override
                                 public void onFailure(Call<TxtResponse> call, Throwable t) {
                                     progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                    Log.e("TxtResults", " bad: " + t);
+                                    Log.i("TxtResults", " bad: " + t);
                                 }
                             });
 
@@ -288,14 +288,14 @@ public class FragmentA extends Fragment {
 
                                     progressDoalog.dismiss();//dismiss progress bar after call was completed
 
-                                    Log.e("TxtResults", " very good: " + response.body());
+                                    Log.i("TxtResults", " very good: " + response.body());
 
                                 }
 
                                 @Override
                                 public void onFailure(Call<NearbyResponse> call, Throwable t) {
                                     progressDoalog.dismiss();//dismiss progress bar after call was completed
-                                    Log.e("NearResults", " bad: " + t);
+                                    Log.i("NearResults", " bad: " + t);
 
                                 }
                             });

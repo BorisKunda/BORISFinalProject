@@ -52,13 +52,10 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 
 
 //YET TO COME:
-//CHANGE LOG.E  to ANOTHER ONES(CASS YOU USE THEM ON  WRONG PURPOSE)
 //DIFFERENT SCREENS SUPPORT
 //COLORFUL TOASTY
 //SAVE INSTANCE ON ROTATION CHANGE
-//RecyclerView Animators
 //DARK DIALOG
-//HIDE KEYBOARD
 //CUT SPARE BELOW PART FROM RECYCLER VIEW ITEM
 //check database for duplicate items
 
@@ -122,7 +119,7 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
             @Override
             public void onLocationResult(LocationResult locationResult) {//callback on request of location updates made by method : requestLocationUpdates()
                 for (Location location : locationResult.getLocations()) {
-                    Log.e("CURRENT LOCATION", " Latitude " + location.getLatitude() + " Longitude " + location.getLongitude());
+                    Log.i("CURRENT LOCATION", " Latitude " + location.getLatitude() + " Longitude " + location.getLongitude());
                     upLatitude = location.getLatitude();//KEEP CURRENT LOCATION
                     upLongitude = location.getLongitude();//KEEP CURRENT LOCATION
 
@@ -237,10 +234,10 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         if (requestCode == REQUEST_CODE_LOCATION) {//received permission result for location permission
 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {// If request is cancelled, the result arrays are empty.
-                Log.e("LOCATION PERMISSION", "GRANTED");
+                Log.i("LOCATION PERMISSION", "GRANTED");
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             } else {
-                Log.e("LOCATION PERMISSION", "DENIED");
+                Log.i("LOCATION PERMISSION", "DENIED");
             }
         }
     }
@@ -251,7 +248,7 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
         if (available == ConnectionResult.SUCCESS) {
             //everything is fine and the user can make map requests
-            Log.e("GOOGLE PLAY CHECK ", "isServicesOK: Google Play Services is working");
+            Log.i("GOOGLE PLAY CHECK ", "isServicesOK: Google Play Services is working");
         } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //an error occurred but we can resolve it
             Log.d("GOOGLE PLAY CHECK ", " an error occurred but we can fix it");

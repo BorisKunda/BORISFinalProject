@@ -98,8 +98,13 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             resultName.setText(txtResultCurrent.name);
 
 
-            TextView resultAddress = (TextView) myView.findViewById(R.id.resultAddress);//ADDRESS
-            resultAddress.setText(txtResultCurrent.formatted_address);
+
+            if(txtResultCurrent.formatted_address==null) {
+                Log.i("ADDRESS","EMPTY");
+            }else {
+                TextView resultAddress = (TextView) myView.findViewById(R.id.resultAddress);//ADDRESS
+                resultAddress.setText(txtResultCurrent.formatted_address);
+            }
 
             //latitude comes before longitude
          //   TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
@@ -149,9 +154,9 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
            //we check photos in case some of json objects have no photo_reference       //PHOTOS
             if (txtResultCurrent.photos == null)
-                Log.e("TxtAdapter", "Photos list of search results is null");//means there no String photo_reference
+                progressBar.setVisibility(View.GONE);//means there no String photo_reference
             else if (txtResultCurrent.photos.isEmpty())
-                Log.e("TxtAdapter", "Photos list of search results is empty");//there is string but its empty " "
+                progressBar.setVisibility(View.GONE);//there is string but its empty " "
             else {
                 String photo_reference = txtResultCurrent.photos.get(0).photo_reference;////we fetch first image (i = 0) from array of photos
                 String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;

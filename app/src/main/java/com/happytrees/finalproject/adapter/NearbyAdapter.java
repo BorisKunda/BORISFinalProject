@@ -95,8 +95,13 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
             TextView nearbyName = (TextView) nearView.findViewById(R.id.nearbyName);//NAME
             nearbyName.setText(nResult.name);
 
-            TextView nearbyAddress = (TextView) nearView.findViewById(R.id.nearbyAddress);//ADDRESS
-            nearbyAddress.setText(nResult.vicinity);
+
+            if(nResult.vicinity == null ) {
+                Log.i("ADDRESS","EMPTY");
+            }else {
+                TextView nearbyAddress = (TextView) nearView.findViewById(R.id.nearbyAddress);//ADDRESS
+                nearbyAddress.setText(nResult.vicinity);
+            }
 
             //latitude comes before longitude
          //   TextView nearLatitude = (TextView) nearView.findViewById(R.id.nearbyLatitude);//LATITUDE
@@ -136,15 +141,16 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
 
             ImageView nImage = (ImageView) nearView.findViewById(R.id.nearbyImage);//IMAGE
+            
 
 
             final ProgressBar nProgressBar = (ProgressBar) nearView.findViewById(R.id.nearbyProgress);//PROGRESS BAR
             nProgressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
             if (nResult.photos == null)
-                Log.e("NearbyAdapter", "Photos list of search results is null");//means there no String photo_reference
+                nProgressBar.setVisibility(View.GONE);//means there no String photo_reference
             else if (nResult.photos.isEmpty())
-                Log.e("NearbyAdapter", "Photos list of search results is empty");//there is string but its empty " "
+                nProgressBar.setVisibility(View.GONE);//there is string but its empty " "
             else {
                 String photo_reference = nResult.photos.get(0).photo_reference;//we fetch first image (i = 0) from array of photos
                 String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
