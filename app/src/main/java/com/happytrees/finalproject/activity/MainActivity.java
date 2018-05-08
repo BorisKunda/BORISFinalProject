@@ -75,6 +75,12 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 
 
 
+//TextSearch
+//https://maps.googleapis.com/maps/api/place/textsearch/json?query=pizza+in+Jerusalem&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
+//NearbySaerch
+//https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=sushi&key=AIzaSyDo6e7ZL0HqkwaKN-GwKgqZnW03FhJNivQ
+
+
 
 
 public class MainActivity extends AppCompatActivity  implements FragmentChanger{
