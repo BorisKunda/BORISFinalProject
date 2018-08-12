@@ -129,7 +129,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             final ProgressBar progressBar = (ProgressBar) favouriteView.findViewById(R.id.progress);//PROGRESS BAR
             progressBar.setVisibility(View.VISIBLE);////make progress bar visible
 
-            //we check items in database which ones have no  photo reference       //PHOTOS
+            ///we check items in database which ones have no  photo reference       //PHOTOS
 
             if (fResultDB.photo_reference.equals("no photo")) {
                 //do nothing
