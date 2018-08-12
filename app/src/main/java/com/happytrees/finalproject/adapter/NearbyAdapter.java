@@ -40,7 +40,7 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
 
     //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-    public String urlPartfinal = "&key=AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";
+    public String urlPartfinal = "&key=AIzaSyC2BVTP-eAHnax9wg1sqAbyfMLgUSuE-PM";
     public ArrayList<NearbyResult> nearResults;//list of places results
     public Context context;
     public float [] nearDistanceResults = new float[10];//10 random number.you need any number higher than 3
@@ -155,7 +155,8 @@ public class NearbyAdapter extends RecyclerView.Adapter<NearbyAdapter.NearbyView
                 String photo_reference = nResult.photos.get(0).photo_reference;//we fetch first image (i = 0) from array of photos
                 String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
-                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                Glide.with(context).load(urlLinktoPhoto).override(500, 500)
+                        .centerCrop().listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                         nProgressBar.setVisibility(View.GONE);//removes progress bar if there was exception

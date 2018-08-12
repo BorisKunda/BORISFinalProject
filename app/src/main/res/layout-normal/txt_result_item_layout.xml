@@ -55,7 +55,6 @@
             <!--progress bar makes loading circle -->
             <ImageView
                 android:id="@+id/resultImage"
-                android:foregroundGravity="right"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_alignParentTop="true"

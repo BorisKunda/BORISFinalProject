@@ -42,7 +42,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     public Context context;
     //urlPartstart + urlPartfinal + photo_reference ==> URL LINK TO PHOTO
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-    public String urlPartfinal = "&key=AIzaSyDTLvyt5Cry0n5eJDXWJNTluMHRuDYYc5s";
+    public String urlPartfinal = "&key=AIzaSyC2BVTP-eAHnax9wg1sqAbyfMLgUSuE-PM";
     public float[] fDistanceResults = new float[10];//10 random number.you need any number higher than 3
     public String fPreference = "kilometre";//default value of distance measurement units
     public double roundedFDis;//rounded value of distance (less numbers after dot)
@@ -137,7 +137,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
                 String fphoto_reference = fResultDB.photo_reference;////we fetch first image (i = 0) from array of photos
                 String furlLinktoPhoto = urlPartstart + fphoto_reference + urlPartfinal;
                 //LOADING IMAGE USING GLIDE
-                Glide.with(context).load(furlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                Glide.with(context).load(furlLinktoPhoto).override(500, 500)
+                        .centerCrop().listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE);//removes progress bar if there was exception

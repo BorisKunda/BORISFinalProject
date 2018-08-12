@@ -41,7 +41,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
 
     //VARIABLES
     public String urlPartstart = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=";
-    public String urlPartfinal = "&key=AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";
+    public String urlPartfinal = "&key=AIzaSyC2BVTP-eAHnax9wg1sqAbyfMLgUSuE-PM";
     public ArrayList<TxtResult> txtResults;//list of places results
     public Context context;
     public float [] txtDistanceResults = new float[10];//10 random number.you need any number higher than 3
@@ -162,7 +162,8 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                 String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
 
-                Glide.with(context).load(urlLinktoPhoto).listener(new RequestListener<String, GlideDrawable>() {
+                Glide.with(context).load(urlLinktoPhoto).override(500, 500)
+                        .centerCrop().listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                         progressBar.setVisibility(View.GONE);//removes progress bar if there was exception

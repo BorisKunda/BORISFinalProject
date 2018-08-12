@@ -68,7 +68,7 @@ public class FragmentA extends Fragment {
     String newNLocation;
     String radius = "500";//Default radius
     //VARIABLES SHARED BOTH BY SEARCHERS
-    String key = "AIzaSyC39IysBBweSQw_FJ8qiZIfiZ6pOfLB5DY";//no need in decode
+    String key = "AIzaSyC2BVTP-eAHnax9wg1sqAbyfMLgUSuE-PM";//no need in decode
     EditText edtSearch;
     String fromEdtTxt;
     boolean txtChecked, nearChecked = false;//both false by default
