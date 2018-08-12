@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/favouriteName"
-                android:layout_width="350dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -29,12 +29,12 @@
                 android:padding="5dp"
                 android:text="Name"
                 android:textColor="#0f65c1"
-                android:textSize="10sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/favouriteAddress"
-                android:layout_width="350dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -42,7 +42,7 @@
                 android:padding="5dp"
                 android:text="Address"
                 android:textColor="#1f932e"
-                android:textSize="10sp" />
+                android:textSize="15sp" />
 
             <ProgressBar
                 android:id="@+id/progress"
