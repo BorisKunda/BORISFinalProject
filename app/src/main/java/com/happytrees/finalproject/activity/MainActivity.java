@@ -56,8 +56,6 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 //DIFFERENT SCREENS SUPPORT
 //COLORFUL TOASTY
 //SAVE INSTANCE ON ROTATION CHANGE
-//DARK DIALOG
-//CUT SPARE BELOW PART FROM RECYCLER VIEW ITEM
 //check database for duplicate items
 
 
@@ -220,12 +218,7 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
                                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
+
                         .create()
                         .show();
             } else {
@@ -249,6 +242,20 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
                 mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             } else {
                 Log.i("LOCATION PERMISSION", "DENIED");
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+                            }
+                        })
+
+                        .create()
+                        .show();
+
             }
         }
     }
