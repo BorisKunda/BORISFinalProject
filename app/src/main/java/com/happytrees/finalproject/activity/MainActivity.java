@@ -52,11 +52,6 @@ import com.happytrees.finalproject.fragments.FragmentFavourites;
 import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 
 
-//YET TO COME:
-//DIFFERENT SCREENS SUPPORT
-//COLORFUL TOASTY
-//SAVE INSTANCE ON ROTATION CHANGE
-//check database for duplicate items
 
 
 
@@ -70,7 +65,7 @@ import com.happytrees.finalproject.fragments.MyPreferencesFragment;
 //DON'T ASK ME AGAIN OPTION WILL APPEAR IF USER DECLINED PERMISSION AT LEAST ONCE
 //WHEN YOU CALL FRAGMENTS FROM MAIN ACTIVITY (OR FROM MENU) YOU DON'T NEED TO  USE INTERFACE .YOU NEED CREATE INTERFACE IN CASE OF FRAGMENT<->FRAGMENT COMMUNICATION
 //WITH FRAGMENTS ALWAYS USE .replace()
-//NEVER PUT LOG MESSAGES ON Log.e
+
 
 
 
@@ -112,7 +107,8 @@ public class MainActivity extends AppCompatActivity  implements FragmentChanger{
         //CHANGE ACTION BAR COLOR
         ActionBar bar =  getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2196F3")));
-
+        bar.setDisplayShowTitleEnabled(false);//remove title from action bar
+        //   getSupportActionBar().setDisplayShowTitleEnabled(false);//remove title from action bar
 
         //create an instance of the Fused Location Provider Client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);//alternatively you can use Location manager which has different Location Listener
