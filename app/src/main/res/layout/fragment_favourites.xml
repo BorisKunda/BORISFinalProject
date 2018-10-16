@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:fontFamily="casual"
         android:text="My Favourite Locations "
         android:textColor="#2196F3"
         android:textSize="30sp"

@@ -107,16 +107,8 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             }
 
             //latitude comes before longitude
-         //   TextView resultLatitude = (TextView) myView.findViewById(R.id.txtLatitude);//LATITUDE
             final double temporaryLatitude = txtResultCurrent.geometry.location.lat;
-            String convertedLatitude = String.valueOf(temporaryLatitude);//you cant setText on double so you need convert it first to String
-          //  resultLatitude.setText(convertedLatitude);
-
-
-       //     TextView resultLongitude = (TextView) myView.findViewById(R.id.txtLongitude);//LONGITUDE
             final double temporaryLongitude = txtResultCurrent.geometry.location.lng;
-            String convertedLongitude = String.valueOf(temporaryLongitude);//you cant setText on double so you need convert it first to String
-           // resultLongitude.setText(convertedLongitude);
 
             TextView resultTxtDistance = (TextView) myView.findViewById(R.id.txtDistance);//DISTANCE
             //method calculates distances between two points according to their latitude and longitude
@@ -133,13 +125,10 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
             if(preference.equals("kilometre") ) {
                 roundedDis =  (double)Math.round( (txtDistanceResults[0]/1000 ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
                   resultTxtDistance.setText(roundedDis + " km ");//km
-            }else{
+            }else{//mile
                 roundedDis =  (double)Math.round( (((txtDistanceResults[0]*0.621371)/1000 ) ) * 100d) / 100d;//number of zeros must be same in and outside parenthesis.number of zeroes equals to number of numbers after dot that will remain after rounding up
                    resultTxtDistance.setText(roundedDis + "  miles");//miles
             }
-
-
-
 
                //fetch place id
                placeId =  txtResultCurrent.place_id;  //PLACE ID
@@ -162,6 +151,7 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                 String urlLinktoPhoto = urlPartstart + photo_reference + urlPartfinal;
 
 
+                /**GLIDE*/
                 Glide.with(context).load(urlLinktoPhoto).override(500, 500)
                         .centerCrop().listener(new RequestListener<String, GlideDrawable>() {
                     @Override
@@ -176,17 +166,15 @@ public class TxtAdapter extends RecyclerView.Adapter<TxtAdapter.TxtHolder> {
                         return false;
 
                     }
-
                 }).into(resultImage);//SET IMAGE THROUGH GLIDE
             }
+
             //MAKE RECYCLER TEXT CLICKABLE
             //CLICK
             myView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-              //      Toast.makeText(context,txtResultCurrent.name,Toast.LENGTH_SHORT).show();
-                    //instance of FragmentChanger interface
-                    FragmentChanger fragmentChanger = (FragmentChanger)context;
+                    FragmentChanger fragmentChanger = (FragmentChanger)context;//CASTING OF CONTEXT TO INTERFACE
                     fragmentChanger.changeFragments(temporaryLatitude,temporaryLongitude,txtResultCurrent.name);
                 }
             });

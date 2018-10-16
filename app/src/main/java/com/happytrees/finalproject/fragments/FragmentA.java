@@ -103,17 +103,16 @@ public class FragmentA extends Fragment {
         edtSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    Log.i("EDITTEXT","NO FOCUS");
-                    InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                if (!hasFocus) {
+                    Log.i("EDITTEXT", "NO FOCUS");
+                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }else if(hasFocus) {
-                    Log.i("EDITTEXT","FOCUS");
+                } else if (hasFocus) {
+                    Log.i("EDITTEXT", "FOCUS");
                 }
             }
         });
         //GET STRING VALUE FROM EDIT TEXT
-
 
 
         //PROGRESS BAR
@@ -132,18 +131,14 @@ public class FragmentA extends Fragment {
         radius = sharedPreferences.getString("list_preference_radius", "500");//list_preference_radius is key(id) of preference item in preferences.xml
 
 
-        //if button in focus closes keyboard
         final Endpoint apiService = APIClient.getClient().create(Endpoint.class);
 
-
-
-
+        /**GO BTN*/
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //closes keyboard when Go button clicked
-                InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 //code checks if network available and user  connected to it (then isConnected is true)
@@ -152,26 +147,19 @@ public class FragmentA extends Fragment {
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
 
-                //check if location provider enabled if not ask user re-enable it
+                //check if location provider enabled(gps) if not ask user re-enable it
                 LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-
 
                 if (!isConnected || !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     isOffline = true;
-                    Toast.makeText(getActivity(),"OFFLINE - enable gps and network providers ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "OFFLINE - enable gps and network providers ", Toast.LENGTH_SHORT).show();
 
                     //displaying last search
                     List<LastSearch> nlastSearches = LastSearch.listAll(LastSearch.class);
-
-                    SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(nlastSearches,getActivity());
-
+                    SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(nlastSearches, getActivity());
                     fragArecycler.setAdapter(searchHistoryAdapter);
 
-
-
-                }else {
-
+                } else {
 
                     //check if edit text empty
                     if (edtSearch.length() != 0) {
@@ -180,7 +168,7 @@ public class FragmentA extends Fragment {
                         //NOTHING SELECTED
                         if (!txtChecked && !nearChecked) {
                             Toast.makeText(getActivity(), "please choose an search type", Toast.LENGTH_SHORT).show();
-                            //TXT SELECTED
+                            /**TXT SELECTED*/
                         } else if (txtChecked && !nearChecked) {
                             //text search call
                             Call<TxtResponse> call = apiService.getMyResults(fromEdtTxt, key);
@@ -191,16 +179,13 @@ public class FragmentA extends Fragment {
                                     final ArrayList<TxtResult> myDataSource = new ArrayList<>();
                                     myDataSource.clear();//clean old list if there was call from before
                                     TxtResponse res = response.body();
-
-
                                     myDataSource.addAll(res.results);
 
                                     if (myDataSource.isEmpty()) {
                                         Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                     }
 
-                                    //SEARCH HISTORY
-
+                                    /**SEARCH HISTORY*/
                                     if (!myDataSource.isEmpty()) {//prevent an attempt of storing empty  array into LastSearch DB
 
 
@@ -230,13 +215,13 @@ public class FragmentA extends Fragment {
 
                                 @Override
                                 public void onFailure(Call<TxtResponse> call, Throwable t) {
-                                    progressDoalog.dismiss();//dismiss progress bar after call was completed
+                                    progressDoalog.dismiss();//dismiss progress bar if call failed
                                     Log.i("TxtResults", " bad: " + t);
                                 }
                             });
 
 
-                            //NEARBY SELECTED
+                            /**NEARBY SELECTED*/
                         } else if (!txtChecked && nearChecked) {
                             Log.i("SEARCH", "NearbySearch");
                             //FETCHED LATITUDE AND LONGITUDE FROM MAIN ACTIVITY
@@ -262,7 +247,7 @@ public class FragmentA extends Fragment {
                                         Toast.makeText(getActivity(), "No Results", Toast.LENGTH_SHORT).show();//TOAST MESSAGE IF WE HAVE JSON WITH ZERO RESULTS
                                     }
 
-                                    //SEARCH HISTORY
+                                    /**SEARCH HISTORY*/
 
                                     if (!nDataSource.isEmpty()) {//prevent an attempt of storing empty  array into LastSearch DB
 
@@ -350,7 +335,6 @@ public class FragmentA extends Fragment {
                 }
 
 
-
             }
 
         });
@@ -358,9 +342,5 @@ public class FragmentA extends Fragment {
     }
 
 
-
 }
-/*
-    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
-                   snackbar.show();
- */
+

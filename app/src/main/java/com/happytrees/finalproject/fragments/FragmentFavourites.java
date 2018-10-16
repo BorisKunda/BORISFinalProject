@@ -49,7 +49,7 @@ public class FragmentFavourites extends Fragment {
         final FavouritesAdapter favouritesAdapter = new FavouritesAdapter(favouritesList, getActivity());
         favouriteRecycler.setAdapter(favouritesAdapter);
 
-        //ALLOWING LISTENING TO SWEEP ACTIONS
+        /**ALLOWING LISTENING TO SWEEP ACTIONS*/
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {//enables sweep left <-> right
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
